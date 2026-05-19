@@ -1,56 +1,52 @@
-import { getPosts } from "@/utils/utils";
+import { getBlogListViewModel } from "@/modules/blog/presentation/viewModels/blogListViewModel";
 import { baseURL } from "@/resources";
 import { getDictionary } from "@/shared/i18n/dictionaries";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const dict = getDictionary("es");
+  const locale = "es"; // RSS en idioma por defecto
+  const dict = getDictionary(locale);
   const blog = {
     title: dict.blog.title,
-    description: dict.blog.description
+    description: dict.blog.description,
   };
   const person = {
     name: dict.person.name,
     email: dict.person.email || "noreply@example.com",
-    avatar: "/images/avatar.jpg"
+    avatar: "/images/avatar.jpg",
   };
 
-  const posts = getPosts(["src", "app", "blog", "posts"]);
-
-  // Sort posts by date (newest first)
-  const sortedPosts = posts.sort((a, b) => {
-    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
-  });
+  const sortedPosts = await getBlogListViewModel({ locale });
 
   // Generate RSS XML
   const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${blog.title}</title>
-    <link>${baseURL}/blog</link>
+    <link>${baseURL}/${locale}/blog</link>
     <description>${blog.description}</description>
-    <language>en</language>
+    <language>${locale}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${baseURL}/api/rss" rel="self" type="application/rss+xml" />
-    <managingEditor>${person.email || "noreply@example.com"} (${person.name})</managingEditor>
-    <webMaster>${person.email || "noreply@example.com"} (${person.name})</webMaster>
+    <managingEditor>${person.email} (${person.name})</managingEditor>
+    <webMaster>${person.email} (${person.name})</webMaster>
     <image>
-      <url>${baseURL}${person.avatar || "/images/avatar.jpg"}</url>
+      <url>${baseURL}${person.avatar}</url>
       <title>${blog.title}</title>
-      <link>${baseURL}/blog</link>
+      <link>${baseURL}/${locale}/blog</link>
     </image>
     ${sortedPosts
       .map(
         (post) => `
     <item>
-      <title>${post.metadata.title}</title>
-      <link>${baseURL}/blog/${post.slug}</link>
-      <guid>${baseURL}/blog/${post.slug}</guid>
-      <pubDate>${new Date(post.metadata.publishedAt).toUTCString()}</pubDate>
-      <description><![CDATA[${post.metadata.summary}]]></description>
-      ${post.metadata.image ? `<enclosure url="${baseURL}${post.metadata.image}" type="image/jpeg" />` : ""}
-      ${post.metadata.tag ? `<category>${post.metadata.tag}</category>` : ""}
-      <author>${person.email || "noreply@example.com"} (${person.name})</author>
+      <title>${post.title}</title>
+      <link>${baseURL}/${locale}/blog/${post.slug}</link>
+      <guid>${baseURL}/${locale}/blog/${post.slug}</guid>
+      <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
+      <description><![CDATA[${post.summary}]]></description>
+      ${post.image ? `<enclosure url="${baseURL}${post.image}" type="image/jpeg" />` : ""}
+      ${post.tag ? `<category>${post.tag}</category>` : ""}
+      <author>${person.email} (${person.name})</author>
     </item>`,
       )
       .join("")}

@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 import { baseURL } from "@/resources";
 import { getDictionary } from "@/shared/i18n/dictionaries";
+import fs from "fs";
+import path from "path";
 
 export const runtime = "nodejs";
 
@@ -11,8 +13,19 @@ export async function GET(request: Request) {
   const person = {
     avatar: "/images/avatar.jpg",
     name: dict.person.name,
-    role: dict.person.role
+    role: dict.person.role,
   };
+
+  let avatarBase64 = "";
+  try {
+    const avatarPath = path.join(process.cwd(), "public", person.avatar);
+    if (fs.existsSync(avatarPath)) {
+      const fileBuffer = fs.readFileSync(avatarPath);
+      avatarBase64 = `data:image/jpeg;base64,${fileBuffer.toString("base64")}`;
+    }
+  } catch (error) {
+    console.error("Error reading avatar locally:", error);
+  }
 
   async function loadGoogleFont(font: string) {
     const url = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -70,7 +83,7 @@ export async function GET(request: Request) {
           }}
         >
           <img
-            src={baseURL + person.avatar}
+            src={avatarBase64 || (baseURL + person.avatar)}
             style={{
               width: "12rem",
               height: "12rem",
