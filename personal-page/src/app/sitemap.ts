@@ -3,6 +3,8 @@ import { dictionaries } from "@/shared/i18n/dictionaries";
 import { mdxBlogRepository } from "@/modules/blog/infrastructure/mdxRepository";
 import { projectRepository } from "@/modules/work/infrastructure/projectRepository";
 
+export const dynamic = "force-static";
+
 export default async function sitemap() {
   const locales = Object.keys(dictionaries);
   let allRoutes: { url: string; lastModified: string }[] = [];

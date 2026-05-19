@@ -55,8 +55,9 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       if (protectedRoutes[pathWithoutLocale as keyof typeof protectedRoutes]) {
         setIsPasswordRequired(true);
 
-        const response = await fetch("/api/check-auth");
-        if (response.ok) {
+        // En modo estático puro, verificamos la sesión en el localStorage
+        const token = localStorage.getItem("authToken");
+        if (token === "authenticated") {
           setIsAuthenticated(true);
         }
       }
@@ -68,13 +69,11 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   }, [pathname]);
 
   const handlePasswordSubmit = async () => {
-    const response = await fetch("/api/authenticate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
+    // Validación estática contra la variable de entorno inyectada durante la compilación
+    const correctPassword = process.env.NEXT_PUBLIC_PAGE_ACCESS_PASSWORD;
 
-    if (response.ok) {
+    if (correctPassword && password === correctPassword) {
+      localStorage.setItem("authToken", "authenticated");
       setIsAuthenticated(true);
       setError(undefined);
     } else {

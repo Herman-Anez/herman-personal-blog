@@ -40,7 +40,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         path={home.path}
         title={home.title}
         description={home.description}
-        image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
+        image={home.image || `/images/og/home.jpg`}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,

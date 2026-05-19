@@ -11,6 +11,7 @@
     "test:i18n": "npx tsx src/utils/validate-i18n.ts",
     "test:i18n-unit": "npx tsx src/utils/test-i18n.ts",
     "test": "npm run test:i18n && npm run test:i18n-unit",
+    "prebuild": "npx tsx src/scripts/generate-rss.ts",
     "prepare": "husky"
   },
   "dependencies": {
