@@ -9,6 +9,7 @@ const withMDX = mdx({
 const nextConfig = {
   // Habilita la compilación estática nativa (HTML/CSS/JS puros) apta para CDNs como GitHub Pages
   output: "export",
+  basePath: "/herman-personal-blog",
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   images: {
