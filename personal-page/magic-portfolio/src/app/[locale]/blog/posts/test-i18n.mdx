@@ -1,0 +1,53 @@
+---
+title: "Prueba de Sistema i18n"
+summary: "Demostración del componente T híbrido y diccionarios modulares."
+publishedAt: "2026-05-16"
+tag: "Test"
+---
+
+# <T es="Sistema de Traducción" en="Translation System" />
+
+Este post sirve como referencia para el uso del componente `<T />`.
+
+## 1. Traducción por ID (JSON Modular)
+Este texto viene del archivo `ui.json`:
+**<T id="ui.techStack" />**
+
+Este viene de `blog.json`:
+**<T id="blog.test.title" />** -> *<T id="blog.test.description" />*
+
+### 1.1 Inyección Directa (¡Nuevo y más fácil!)
+Ahora puedes usar el diccionario directamente como una variable `d`:
+- Desde `ui.json`: **`{d.ui.techStack}`**
+- Desde `blog.json`: **`{d.blog.test.title}`**
+
+### 1.2 Superpoder de Fallback
+Si usas un ID que no existe, pero defines texto inline, el componente `<T />` te salva:
+**<T id="llave.fantasma" es="Fallback Inline" />**
+*(Aquí intentó buscar 'llave.fantasma', falló y usó el texto en español proporcionado).*
+
+---
+
+## 2. Traducción Inline (MDX Directo)
+<T 
+  es="Esto es un párrafo escrito directamente en el archivo MDX. Útil para contenido único." 
+  en="This is a paragraph written directly in the MDX file. Useful for unique content." 
+/>
+
+---
+
+## 3. Componentes Once UI Interactivos
+<AccordionGroup>
+  <Accordion title={<T es="¿Cómo funciona?" en="How it works?" />}>
+    <T 
+      es="Usa useParams() para detectar el idioma en la URL y renderiza la prop correcta o busca en el diccionario." 
+      en="It uses useParams() to detect the language in the URL and renders the correct prop or looks up the dictionary." 
+    />
+  </Accordion>
+</AccordionGroup>
+
+<Row marginTop="24" horizontal="center">
+    <Button variant="primary" size="s">
+        <T id="ui.backToHome" />
+    </Button>
+</Row>

@@ -2,7 +2,6 @@ import {
   Avatar,
   Button,
   Column,
-  Heading,
   Icon,
   IconButton,
   Media,
@@ -11,23 +10,33 @@ import {
   Meta,
   Schema,
   Row,
+  Heading,
 } from "@once-ui-system/core";
-import { baseURL, about, person, social } from "@/resources";
+import { baseURL } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
+import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getAboutViewModel } from "@/modules/about/presentation/viewModels/aboutViewModel";
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const resolvedParams = await params;
+  const { about } = await getAboutViewModel(resolvedParams.locale);
+
   return Meta.generate({
     title: about.title,
     description: about.description,
     baseURL: baseURL,
     image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
-    path: about.path,
+    path: `/${resolvedParams.locale}${about.path}`,
   });
 }
 
-export default function About() {
+export default async function About({ params }: { params: Promise<{ locale: string }> }) {
+  const resolvedParams = await params;
+  const dict = getDictionary(resolvedParams.locale);
+  const { about, person, social } = await getAboutViewModel(resolvedParams.locale);
+
   const structure = [
     {
       title: about.intro.title,
@@ -50,6 +59,7 @@ export default function About() {
       items: about.technical.skills.map((skill) => skill.title),
     },
   ];
+
   return (
     <Column maxWidth="m">
       <Schema
@@ -77,7 +87,7 @@ export default function About() {
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
-      <Row fillWidth s={{ direction: "column"}} horizontal="center">
+      <Row fillWidth s={{ direction: "column" }} horizontal="center">
         {about.avatar.display && (
           <Column
             className={styles.avatar}
@@ -96,7 +106,7 @@ export default function About() {
             <Avatar src={person.avatar} size="xl" />
             <Row gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
-              {person.location}
+              {person.location as unknown as string}
             </Row>
             {person.languages && person.languages.length > 0 && (
               <Row wrap gap="8">
@@ -133,7 +143,7 @@ export default function About() {
                 }}
               >
                 <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Row paddingX="8">Schedule a call</Row>
+                <Row paddingX="8">{dict.ui.scheduleCall || "Schedule a call"}</Row>
                 <IconButton
                   href={about.calendar.link}
                   data-border="rounded"
@@ -164,34 +174,34 @@ export default function About() {
                 data-border="rounded"
               >
                 {social
-                      .filter((item) => item.essential)
-                      .map(
-                  (item) =>
-                    item.link && (
-                      <React.Fragment key={item.name}>
-                        <Row s={{ hide: true }}>
-                          <Button
-                            key={item.name}
-                            href={item.link}
-                            prefixIcon={item.icon}
-                            label={item.name}
-                            size="s"
-                            weight="default"
-                            variant="secondary"
-                          />
-                        </Row>
-                        <Row hide s={{ hide: false }}>
-                          <IconButton
-                            size="l"
-                            key={`${item.name}-icon`}
-                            href={item.link}
-                            icon={item.icon}
-                            variant="secondary"
-                          />
-                        </Row>
-                      </React.Fragment>
-                    ),
-                )}
+                  .filter((item) => item.essential)
+                  .map(
+                    (item) =>
+                      item.link && (
+                        <React.Fragment key={item.name}>
+                          <Row s={{ hide: true }}>
+                            <Button
+                              key={item.name}
+                              href={item.link}
+                              prefixIcon={item.icon}
+                              label={item.name}
+                              size="s"
+                              weight="default"
+                              variant="secondary"
+                            />
+                          </Row>
+                          <Row hide s={{ hide: false }}>
+                            <IconButton
+                              size="l"
+                              key={`${item.name}-icon`}
+                              href={item.link}
+                              icon={item.icon}
+                              variant="secondary"
+                            />
+                          </Row>
+                        </React.Fragment>
+                      ),
+                  )}
               </Row>
             )}
           </Column>
