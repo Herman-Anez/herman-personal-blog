@@ -1,0 +1,66 @@
+---
+title: "Gestión de Posts e i18n"
+summary: "Aprende a crear, editar y traducir tus artículos usando el sistema híbrido de diccionarios y MDX."
+publishedAt: "2026-05-16"
+tag: "Guía"
+---
+
+# <T es="Gestión de Contenidos" en="Content Management" />
+
+Ahora que hemos unificado la estructura del blog, gestionar posts es más sencillo y potente.
+
+## <T es="Estructura de Archivos" en="File Structure" />
+
+Todos los posts residen en una única carpeta:
+`src/app/[locale]/blog/posts/*.mdx`
+
+Ya no necesitas duplicar archivos por idioma. Un solo archivo `.mdx` contiene todas las traducciones.
+
+## <T es="Uso del componente T" en="Using the T Component" />
+
+Para que tu contenido sea bilingüe, envuelve tus textos en el componente `<T />`.
+
+### <T es="Traducción Inline" en="Inline Translation" />
+Ideal para párrafos únicos y largos.
+
+```tsx
+<T 
+  es="Contenido en español..." 
+  en="English content..." 
+/>
+```
+
+### <T es="Traducción por ID" en="ID-based Translation" />
+Ideal para términos repetitivos o técnicos definidos en `src/resources/lang/[locale]/*.json`.
+
+```tsx
+<T id="ui.techStack" />
+```
+
+## <T es="Metadatos (Frontmatter)" en="Metadata (Frontmatter)" />
+
+El frontmatter define el título y resumen que se ven en el listado del blog. Actualmente, estos se definen de forma estática en el archivo:
+
+<CodeBlock
+    marginBottom="16"
+    codes={[
+      {
+        code:
+`---
+title: "Título del Post"
+summary: "Resumen corto del post."
+publishedAt: "2026-05-16"
+tag: "Tecnología"
+---`,
+        language: "tsx",
+        label: "Ejemplo de Frontmatter"
+      }
+    ]}
+/>
+
+---
+
+<T 
+  es="Tip: Usa el archivo test-i18n.mdx como referencia visual para ver todos los componentes disponibles." 
+  en="Tip: Use the test-i18n.mdx file as a visual reference to see all available components." 
+/>

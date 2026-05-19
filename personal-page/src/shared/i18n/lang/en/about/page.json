@@ -1,0 +1,76 @@
+{
+  "about": {
+    "label": "About me",
+    "title": "About me – Herman Añez",
+    "description": "Meet Herman Añez, Computer Engineer",
+    "introTitle": "Introduction",
+    "introDescription": "I am a Computer Engineer with over 12 years of experience in software architecture and distributed systems. I specialize in DDD, Clean Architecture, and event-driven systems, always keeping a strong focus on scalability, Zero Trust security, and technical leadership. I have had the opportunity to lead teams and transform business requirements into efficient technical solutions.",
+    "workTitle": "Professional Experience",
+    "workExperiences": [
+      {
+        "company": "Interficie Internet Services",
+        "timeframe": "08/2022 – 08/2025",
+        "role": "Full Stack Developer / Technical Lead",
+        "achievements": [
+          "Led the technical evolution of critical applications, progressing from junior developer to technical lead.",
+          "Acted as a direct liaison with clients, transforming business requirements into technical specifications.",
+          "Implemented best practices that ensured scalability, quality, and adherence to critical deadlines.",
+          "Coordinated with design and product teams for efficient feature integration."
+        ]
+      },
+      {
+        "company": "Freelance",
+        "timeframe": "01/2022 – 06/2022",
+        "role": "Lead Developer",
+        "achievements": [
+          "High-Performance System Design: Designed and implemented a specialized system for the massive generation of digital media (NFTs).",
+          "Optimized parallel processing workflows to handle massive volumes of data."
+        ]
+      },
+      {
+        "company": "Funiber (Ibero-American University Foundation)",
+        "timeframe": "02/2018 – 09/2021",
+        "role": "Software Developer",
+        "achievements": [
+          "Full Stack developer on the assistance project.",
+          "Team Lead on the exam delivery and assistance Q&A project.",
+          "Trainer for new interns."
+        ]
+      },
+      {
+        "company": "Independent",
+        "timeframe": "09/2014 – 02/2019",
+        "role": "University Tutor",
+        "achievements": [
+          "Tutor for the courses: Mathematics 1&2, Calculus 1&2, Physics 1, Discrete Mathematics, Programming 1,2,3."
+        ]
+      }
+    ],
+    "studiesTitle": "Studies",
+    "studiesInstitutions": [
+      {
+        "name": "European University of the Atlantic",
+        "description": "Computer Engineering. Santander, Spain (02/2018 – 09/2021)."
+      }
+    ],
+    "technicalTitle": "Technical Skills",
+    "technicalSkills": [
+      {
+        "title": "Architecture & Leadership",
+        "description": "DDD, Hexagonal Architecture, Microservices, Outbox Pattern, C4 Model. Stakeholder management, technical mentoring, agile methodologies."
+      },
+      {
+        "title": "Backend",
+        "description": "Java (Spring Boot), Node.js (TypeScript), PHP (Laravel), RabbitMQ."
+      },
+      {
+        "title": "Frontend",
+        "description": "React, Next.js, TypeScript, Tailwind CSS."
+      },
+      {
+        "title": "Security and Data",
+        "description": "OAuth2/JWT, mTLS, PostgreSQL (RLS), MongoDB, Redis, Supabase, PocketBase."
+      }
+    ]
+  }
+}

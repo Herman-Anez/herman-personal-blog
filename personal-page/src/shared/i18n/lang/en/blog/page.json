@@ -1,0 +1,11 @@
+{
+  "blog": {
+    "label": "Blog",
+    "title": "Writing about technology...",
+    "description": "Articles written by Herman Añez",
+    "test": {
+      "title": "Title from JSON",
+      "description": "This content was successfully extracted from the centralized dictionary."
+    }
+  }
+}

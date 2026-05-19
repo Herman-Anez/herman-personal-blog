@@ -1,0 +1,47 @@
+{
+  "name": "@once-ui-system/magic-portfolio",
+  "version": "2.3.0",
+  "scripts": {
+    "dev": "next dev",
+    "export": "next export",
+    "build": "next build",
+    "biome-write": "npx @biomejs/biome format --write .",
+    "start": "next start",
+    "lint": "next lint",
+    "test:i18n": "npx tsx src/utils/validate-i18n.ts",
+    "test:i18n-unit": "npx tsx src/utils/test-i18n.ts",
+    "test": "npm run test:i18n && npm run test:i18n-unit",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.0",
+    "@next/mdx": "^16.0.10",
+    "@once-ui-system/core": "latest",
+    "classnames": "^2.5.1",
+    "cookie": "^1.0.2",
+    "gray-matter": "^4.0.3",
+    "lint-staged": "^16.1.5",
+    "next": "^16.0.10",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.3",
+    "react-icons": "^5.5.0",
+    "sass": "^1.86.3",
+    "transliteration": "^2.3.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^20.17.30",
+    "@types/react": "^19.2.4",
+    "@types/react-dom": "^19.2.3",
+    "husky": "^9.1.7",
+    "tsx": "^4.22.0",
+    "typescript": "^5.8.3",
+    "tzdata": "^1.0.44"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json}": "npx @biomejs/biome format --write",
+    "src/shared/i18n/lang/**/*.json": "npm run test:i18n"
+  }
+}
