@@ -1,13 +1,14 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
+import { Fade, Flex, Line, Row, ToggleButton, Button } from "@once-ui-system/core";
 
-import { routes, display, person, about, blog, work, gallery } from "@/resources";
+import { routes, display } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
+import { getDictionary } from "@/shared/i18n/dictionaries";
 
 type TimeDisplayProps = {
   timeZone: string;
@@ -44,6 +45,24 @@ export default TimeDisplay;
 
 export const Header = () => {
   const pathname = usePathname() ?? "";
+  const params = useParams();
+  const router = useRouter();
+  const locale = (params?.locale as string) || "es";
+  
+  const dict = getDictionary(locale);
+  const personLocation = dict.person.location;
+  const aboutLabel = dict.about.label;
+  const workLabel = dict.work.label;
+  const blogLabel = dict.blog.label;
+  const galleryLabel = dict.gallery.label;
+
+  // Remove locale prefix from pathname for routing checks
+  const currentPath = pathname.replace(new RegExp(`^/${locale}`), "") || "/";
+
+  const handleLanguageSwitch = () => {
+    const newLocale = locale === "es" ? "en" : "es";
+    router.push(`/${newLocale}${currentPath}`);
+  };
 
   return (
     <>
@@ -73,7 +92,7 @@ export const Header = () => {
         }}
       >
         <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Row s={{ hide: true }}>{person.location}</Row>}
+          {display.location && <Row s={{ hide: true }}>{personLocation}</Row>}
         </Row>
         <Row fillWidth horizontal="center">
           <Row
@@ -87,7 +106,7 @@ export const Header = () => {
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+                <ToggleButton prefixIcon="home" href={`/${locale}`} selected={currentPath === "/"} />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
@@ -95,16 +114,16 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="person"
-                      href="/about"
-                      label={about.label}
-                      selected={pathname === "/about"}
+                      href={`/${locale}/about`}
+                      label={aboutLabel}
+                      selected={currentPath === "/about"}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="person"
-                      href="/about"
-                      selected={pathname === "/about"}
+                      href={`/${locale}/about`}
+                      selected={currentPath === "/about"}
                     />
                   </Row>
                 </>
@@ -114,16 +133,16 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="grid"
-                      href="/work"
-                      label={work.label}
-                      selected={pathname.startsWith("/work")}
+                      href={`/${locale}/work`}
+                      label={workLabel}
+                      selected={currentPath.startsWith("/work")}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="grid"
-                      href="/work"
-                      selected={pathname.startsWith("/work")}
+                      href={`/${locale}/work`}
+                      selected={currentPath.startsWith("/work")}
                     />
                   </Row>
                 </>
@@ -133,16 +152,16 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="book"
-                      href="/blog"
-                      label={blog.label}
-                      selected={pathname.startsWith("/blog")}
+                      href={`/${locale}/blog`}
+                      label={blogLabel}
+                      selected={currentPath.startsWith("/blog")}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="book"
-                      href="/blog"
-                      selected={pathname.startsWith("/blog")}
+                      href={`/${locale}/blog`}
+                      selected={currentPath.startsWith("/blog")}
                     />
                   </Row>
                 </>
@@ -152,16 +171,16 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="gallery"
-                      href="/gallery"
-                      label={gallery.label}
-                      selected={pathname.startsWith("/gallery")}
+                      href={`/${locale}/gallery`}
+                      label={galleryLabel}
+                      selected={currentPath.startsWith("/gallery")}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="gallery"
-                      href="/gallery"
-                      selected={pathname.startsWith("/gallery")}
+                      href={`/${locale}/gallery`}
+                      selected={currentPath.startsWith("/gallery")}
                     />
                   </Row>
                 </>
@@ -172,6 +191,10 @@ export const Header = () => {
                   <ThemeToggle />
                 </>
               )}
+              <Line background="neutral-alpha-medium" vert maxHeight="24" />
+              <Button size="s" variant="tertiary" onClick={handleLanguageSwitch}>
+                {locale === "es" ? "EN" : "ES"}
+              </Button>
             </Row>
           </Row>
         </Row>
@@ -184,7 +207,7 @@ export const Header = () => {
             gap="20"
           >
             <Flex s={{ hide: true }}>
-              {display.time && <TimeDisplay timeZone={person.location} />}
+              {display.time && <TimeDisplay timeZone={personLocation} />}
             </Flex>
           </Flex>
         </Flex>

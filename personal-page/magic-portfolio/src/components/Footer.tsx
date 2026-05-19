@@ -1,8 +1,34 @@
+"use client";
+
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { person, social } from "@/resources";
+import { getDictionary } from "@/shared/i18n/dictionaries";
+import { useParams } from "next/navigation";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
+  const params = useParams();
+  const locale = (params?.locale as string) || "es";
+  const dict = getDictionary(locale);
+
+  const personName = dict.person.name;
+  const social = [
+    {
+      name: "GitHub",
+      icon: "github",
+      link: "https://github.com/placeholder",
+    },
+    {
+      name: "LinkedIn",
+      icon: "linkedin",
+      link: "https://www.linkedin.com/in/placeholder/",
+    },
+    {
+      name: "Email",
+      icon: "email",
+      link: `mailto:${dict.person.email}`,
+    },
+  ];
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -23,7 +49,7 @@ export const Footer = () => {
       >
         <Text variant="body-default-s" onBackground="neutral-strong">
           <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
+          <Text paddingX="4">{personName}</Text>
           <Text onBackground="neutral-weak">
             {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
             / Build your portfolio with{" "}
