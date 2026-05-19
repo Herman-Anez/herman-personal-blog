@@ -4,6 +4,9 @@
 node_modules/
 .vscode
 
+.agents
+
+
 /.pnp
 .pnp.js
 
