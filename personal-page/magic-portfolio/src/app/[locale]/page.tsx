@@ -11,7 +11,6 @@ import {
   Meta,
 } from "@once-ui-system/core";
 import { baseURL, routes } from "@/resources";
-import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 import { getHomeViewModel } from "@/modules/site/presentation/viewModels/homeViewModel";
@@ -130,7 +129,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </Column>
       )}
       <Projects range={[2]} locale={resolvedParams.locale} />
-      <Mailchimp />
     </Column>
   );
 }

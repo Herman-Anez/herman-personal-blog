@@ -1,5 +1,4 @@
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { baseURL } from "@/resources";
 import { getDictionary } from "@/shared/i18n/dictionaries";
@@ -47,7 +46,6 @@ export default async function Blog({ params }: { params: Promise<{ locale: strin
       <Column fillWidth flex={1} gap="40">
         <Posts range={[1, 1]} thumbnail locale={resolvedParams.locale} />
         <Posts range={[2, 3]} columns="2" thumbnail direction="column" locale={resolvedParams.locale} />
-        <Mailchimp marginBottom="l" />
         <Heading as="h2" variant="heading-strong-xl" marginLeft="l">
           {(dict.ui as any).earlierPosts || "Earlier posts"}
         </Heading>
