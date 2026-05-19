@@ -1,4 +1,4 @@
-import { getPosts } from "@/utils/utils";
+import { getBlogListViewModel } from "@/modules/blog/presentation/viewModels/blogListViewModel";
 import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
 
@@ -8,29 +8,22 @@ interface PostsProps {
   thumbnail?: boolean;
   direction?: "row" | "column";
   exclude?: string[];
+  locale?: string;
 }
 
-export function Posts({
+export async function Posts({
   range,
   columns = "1",
   thumbnail = false,
   exclude = [],
   direction,
+  locale = "es",
 }: PostsProps) {
-  let allBlogs = getPosts(["src", "app", "blog", "posts"]);
-
-  // Exclude by slug (exact match)
-  if (exclude.length) {
-    allBlogs = allBlogs.filter((post) => !exclude.includes(post.slug));
-  }
-
-  const sortedBlogs = allBlogs.sort((a, b) => {
-    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+  const displayedBlogs = await getBlogListViewModel({
+    locale,
+    range,
+    exclude,
   });
-
-  const displayedBlogs = range
-    ? sortedBlogs.slice(range[0] - 1, range.length === 2 ? range[1] : sortedBlogs.length)
-    : sortedBlogs;
 
   return (
     <>

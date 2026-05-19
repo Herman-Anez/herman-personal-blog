@@ -1,27 +1,19 @@
-import { getPosts } from "@/utils/utils";
+import { getProjectListViewModel } from "@/modules/work/presentation/viewModels/projectListViewModel";
 import { Column } from "@once-ui-system/core";
 import { ProjectCard } from "@/components";
 
 interface ProjectsProps {
   range?: [number, number?];
   exclude?: string[];
+  locale?: string;
 }
 
-export function Projects({ range, exclude }: ProjectsProps) {
-  let allProjects = getPosts(["src", "app", "work", "projects"]);
-
-  // Exclude by slug (exact match)
-  if (exclude && exclude.length > 0) {
-    allProjects = allProjects.filter((post) => !exclude.includes(post.slug));
-  }
-
-  const sortedProjects = allProjects.sort((a, b) => {
-    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+export async function Projects({ range, exclude, locale = "es" }: ProjectsProps) {
+  const displayedProjects = await getProjectListViewModel({
+    locale,
+    range,
+    exclude,
   });
-
-  const displayedProjects = range
-    ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
-    : sortedProjects;
 
   return (
     <Column fillWidth gap="xl" marginBottom="40" paddingX="l">
@@ -29,13 +21,13 @@ export function Projects({ range, exclude }: ProjectsProps) {
         <ProjectCard
           priority={index < 2}
           key={post.slug}
-          href={`/work/${post.slug}`}
-          images={post.metadata.images}
-          title={post.metadata.title}
-          description={post.metadata.summary}
+          href={`/${locale}/work/${post.slug}`}
+          images={post.images}
+          title={post.title}
+          description={post.summary}
           content={post.content}
-          avatars={post.metadata.team?.map((member) => ({ src: member.avatar })) || []}
-          link={post.metadata.link || ""}
+          avatars={post.team.map((member) => ({ src: member.avatar }))}
+          link={post.link || ""}
         />
       ))}
     </Column>

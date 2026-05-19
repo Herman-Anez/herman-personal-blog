@@ -1,8 +1,20 @@
 import { getPosts } from "@/utils/utils";
-import { baseURL, blog, person } from "@/resources";
+import { baseURL } from "@/resources";
+import { getDictionary } from "@/shared/i18n/dictionaries";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  const dict = getDictionary("es");
+  const blog = {
+    title: dict.blog.title,
+    description: dict.blog.description
+  };
+  const person = {
+    name: dict.person.name,
+    email: dict.person.email || "noreply@example.com",
+    avatar: "/images/avatar.jpg"
+  };
+
   const posts = getPosts(["src", "app", "blog", "posts"]);
 
   // Sort posts by date (newest first)

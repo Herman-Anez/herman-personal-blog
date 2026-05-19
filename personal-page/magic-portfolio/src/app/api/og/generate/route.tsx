@@ -1,11 +1,18 @@
 import { ImageResponse } from "next/og";
-import { baseURL, person } from "@/resources";
+import { baseURL } from "@/resources";
+import { getDictionary } from "@/shared/i18n/dictionaries";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   let url = new URL(request.url);
   let title = url.searchParams.get("title") || "Portfolio";
+  const dict = getDictionary("es");
+  const person = {
+    avatar: "/images/avatar.jpg",
+    name: dict.person.name,
+    role: dict.person.role
+  };
 
   async function loadGoogleFont(font: string) {
     const url = `https://fonts.googleapis.com/css2?family=${font}`;
