@@ -23,14 +23,6 @@ type Metadata = {
 
 import { notFound } from "next/navigation";
 
-function getMDXFiles(dir: string) {
-  if (!fs.existsSync(dir)) {
-    notFound();
-  }
-
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
-}
-
 function readMDXFile(filePath: string) {
   if (!fs.existsSync(filePath)) {
     notFound();
@@ -54,21 +46,70 @@ function readMDXFile(filePath: string) {
   return { metadata, content };
 }
 
-function getMDXData(dir: string) {
-  const mdxFiles = getMDXFiles(dir);
-  return mdxFiles.map((file) => {
-    const { metadata, content } = readMDXFile(path.join(dir, file));
-    const slug = path.basename(file, path.extname(file));
+function scanMDX(dir: string, baseDir: string): any[] {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
 
-    return {
-      metadata,
-      slug,
-      content,
-    };
-  });
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  let results: any[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results = results.concat(scanMDX(fullPath, baseDir));
+    } else if (entry.isFile() && path.extname(entry.name) === ".mdx") {
+      const relativePath = path.relative(baseDir, fullPath);
+      // Remove the .mdx extension
+      const relativeSlug = relativePath.slice(0, -4);
+      // Normalize path separators to forward slash for URL/slug consistency
+      const normalizedSlug = relativeSlug.replace(/\\/g, "/");
+      const parts = normalizedSlug.split("/");
+
+      let slug = normalizedSlug;
+      let family: string | undefined = undefined;
+      let isIndex = false;
+
+      if (parts.length > 1) {
+        // It resides inside a subfolder family
+        const parentFolder = parts[0];
+        const lastPart = parts[parts.length - 1];
+
+        if (lastPart === "index") {
+          isIndex = true;
+          // Slug is the path without the index suffix (e.g. "ddd-guide")
+          slug = parts.slice(0, -1).join("/");
+          family = undefined; // Index is the root, so it doesn't have a parent family link
+        } else {
+          isIndex = false;
+          slug = normalizedSlug;
+          family = parentFolder;
+        }
+      } else {
+        // Flat file in root directory
+        isIndex = false;
+        family = undefined;
+      }
+
+      const { metadata, content } = readMDXFile(fullPath);
+
+      results.push({
+        slug,
+        family,
+        isIndex,
+        metadata,
+        content,
+      });
+    }
+  }
+
+  return results;
 }
 
-export function getPosts(customPath = ["", "", "", ""]) {
+export function getPosts(customPath = ["src", "app", "[locale]", "blog", "posts"]) {
   const postsDir = path.join(process.cwd(), ...customPath);
-  return getMDXData(postsDir);
+  if (!fs.existsSync(postsDir)) {
+    notFound();
+  }
+  return scanMDX(postsDir, postsDir);
 }

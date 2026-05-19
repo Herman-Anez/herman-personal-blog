@@ -1,0 +1,11 @@
+{
+  "person": {
+    "firstName": "Herman",
+    "lastName": "Añez",
+    "name": "Herman Añez",
+    "role": "Computer Engineer",
+    "email": "herman.anez.v@gmail.com",
+    "location": "Europe/Madrid",
+    "languages": ["Spanish", "English"]
+  }
+}

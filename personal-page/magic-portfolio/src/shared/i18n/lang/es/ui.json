@@ -1,0 +1,15 @@
+{
+  "ui": {
+    "scheduleCall": "Schedule a call",
+    "latestFromBlog": "Latest from the blog",
+    "pageNotFound": "404",
+    "pageNotFoundTitle": "Page not found",
+    "pageNotFoundDescription": "The page you are looking for does not exist.",
+    "backToHome": "Return home",
+    "subscribeTitle": "Subscribe to Herman's Newsletter",
+    "subscribeDescription": "My weekly newsletter about creativity and engineering",
+    "featuredWork": "Proyectos destacados",
+    "techStack": "Stack Tecnológico",
+    "series": "Serie de contenido"
+  }
+}

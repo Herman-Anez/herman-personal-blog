@@ -7,7 +7,11 @@
     "build": "next build",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:i18n": "npx tsx src/utils/validate-i18n.ts",
+    "test:i18n-unit": "npx tsx src/utils/test-i18n.ts",
+    "test": "npm run test:i18n && npm run test:i18n-unit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -31,8 +35,13 @@
     "@types/node": "^20.17.30",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.25.0",
+    "husky": "^9.1.7",
+    "tsx": "^4.22.0",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json}": "npx @biomejs/biome format --write",
+    "src/shared/i18n/lang/**/*.json": "npm run test:i18n"
   }
 }

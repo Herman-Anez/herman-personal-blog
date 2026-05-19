@@ -1,0 +1,76 @@
+{
+  "about": {
+    "label": "Sobre mí",
+    "title": "Sobre mí – Herman Añez",
+    "description": "Conoce a Herman Añez, Ingeniero Informático",
+    "introTitle": "Introducción",
+    "introDescription": "Soy un Ingeniero Informático con más de 12 años de experiencia en arquitectura de software y sistemas distribuidos. Me especializo en DDD, Clean Architecture y sistemas orientados a eventos, siempre manteniendo un fuerte enfoque en la escalabilidad, la seguridad Zero Trust y el liderazgo técnico. He tenido la oportunidad de liderar equipos y transformar requerimientos de negocio en soluciones técnicas eficientes.",
+    "workTitle": "Experiencia Profesional",
+    "workExperiences": [
+      {
+        "company": "Interficie Internet Services",
+        "timeframe": "08/2022 – 08/2025",
+        "role": "Full Stack Developer / Responsable Técnico",
+        "achievements": [
+          "Lideré la evolución técnica de aplicaciones críticas, pasando de desarrollador junior a responsable técnico.",
+          "Actué como nexo directo con clientes, transformando requerimientos de negocio en especificaciones técnicas.",
+          "Implementé mejores prácticas que aseguraron escalabilidad, calidad y cumplimiento de plazos críticos.",
+          "Coordiné con equipos de diseño y producto para la integración eficiente de funcionalidades."
+        ]
+      },
+      {
+        "company": "Freelance",
+        "timeframe": "01/2022 – 06/2022",
+        "role": "Lead Developer",
+        "achievements": [
+          "Diseño de Sistemas de Alto Rendimiento: Diseñé e implementé un sistema especializado para la generación masiva de media digital (NFTs).",
+          "Optimización de flujos de procesamiento paralelo para manejar volúmenes masivos de datos."
+        ]
+      },
+      {
+        "company": "Funiber (Fundación Universitaria Iberoamericana)",
+        "timeframe": "02/2018 – 09/2021",
+        "role": "Desarrollador de Software",
+        "achievements": [
+          "Full Stack developer en el proyecto de asistencias.",
+          "Team Lead en el proyecto de entrega de exámenes y Q&A de asistencias.",
+          "Capacitador de becarios nuevos."
+        ]
+      },
+      {
+        "company": "Independiente",
+        "timeframe": "09/2014 – 02/2019",
+        "role": "Tutor Universitario",
+        "achievements": [
+          "Profesor en las materias: Matemática 1&2, Cálculo 1&2, Física 1, Matemática discreta, Programación 1,2,3."
+        ]
+      }
+    ],
+    "studiesTitle": "Estudios",
+    "studiesInstitutions": [
+      {
+        "name": "Universidad Europea Del Atlantico",
+        "description": "Ingeniería Informática. Santander, España (02/2018 – 09/2021)."
+      }
+    ],
+    "technicalTitle": "Habilidades Técnicas",
+    "technicalSkills": [
+      {
+        "title": "Arquitectura & Liderazgo",
+        "description": "DDD, Arquitectura Hexagonal, Microservicios, Outbox Pattern, C4 Model. Gestión de stakeholders, mentoría técnica, metodologías ágiles."
+      },
+      {
+        "title": "Backend",
+        "description": "Java (Spring Boot), Node.js (TypeScript), PHP (Laravel), RabbitMQ."
+      },
+      {
+        "title": "Frontend",
+        "description": "React, Next.js, TypeScript, Tailwind CSS."
+      },
+      {
+        "title": "Seguridad y Datos",
+        "description": "OAuth2/JWT, mTLS, PostgreSQL (RLS), MongoDB, Redis, Supabase, PocketBase."
+      }
+    ]
+  }
+}
