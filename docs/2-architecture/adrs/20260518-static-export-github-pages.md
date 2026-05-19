@@ -28,8 +28,11 @@ Chosen option: **Option 2: Exportación Estática Completa**, porque cumple al 1
 ### Positive Consequences
 
 - **Páginas Pre-renderizadas**: Todas las páginas bilingües y las combinaciones de idiomas y slugs (ej: `/es/blog/mi-post`, `/en/blog/my-post`) son resueltas y pre-renderizadas en tiempo de compilación a través de implementaciones exhaustivas de `generateStaticParams()`.
-- **APIs Estáticas Forzadas**: Rutas dinámicas de infraestructura (como el feed RSS `rss/route.ts`, el generador de `sitemap.xml`, `robots.txt` o el servicio de imágenes dinámicas Open Graph `api/og/generate/route.tsx`) exponen explícitamente `export const dynamic = "force-static";`, forzando a Next.js a compilarlas como archivos estáticos en build-time.
-- **Compilación Offline Segura para OG**: El generador de imágenes OG requiere el avatar del autor. En lugar de realizar un fetch HTTP a la URL de producción (lo que rompería compilaciones offline o fallaría en entornos CI sin red), se implementó un decodificador estático que lee el archivo físico local `/images/avatar.jpg` usando `fs` y lo inyecta codificado en `base64` directamente en el componente visual Satori de forma instantánea.
+- **APIs y Rutas Estáticas**:
+  - Las APIs dinámicas en runtime fueron eliminadas (carpeta `api/`).
+  - La protección por contraseña (`RouteGuard.tsx`) funciona puramente en el cliente validando contraseñas contra variables de entorno en build-time (`NEXT_PUBLIC_PAGE_ACCESS_PASSWORD`) y guardando sesiones en `localStorage`.
+  - El feed RSS se genera offline antes de la compilación mediante un script Node (`generate-rss.ts` en la fase `prebuild`), escribiendo físicamente `rss.xml` y los localizados en `/public/` para que Next.js los exponga en la raíz estática del sitio.
+  - Los ficheros `sitemap.xml` y `robots.txt` se compilan usando `export const dynamic = "force-static"` en `src/app/` para que Next.js los exporte nativamente en tiempo de build.
 - **Pipeline Automático**: Un workflow optimizado en GitHub Actions (`.github/workflows/deploy.yml`) automatiza el build y despliegue directo a la rama de producción de GitHub Pages ante cada push en `main`.
 
 ### Negative Consequences

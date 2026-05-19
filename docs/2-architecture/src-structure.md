@@ -9,12 +9,6 @@ Este documento provee un mapa completo y detallado de la estructura de carpetas 
 ```text
 personal-page/src/
 ├── app/                              # Capa de Presentación (Rutas de Next.js y Presentadores)
-│   ├── api/                          # Endpoints Auxiliares Compilados Estáticamente (force-static)
-│   │   ├── authenticate/             # API de simulación de login/sesión
-│   │   ├── check-auth/               # API de verificación de estado de sesión
-│   │   ├── og/                       # Generación dinámica offline de imágenes promocionales Open Graph
-│   │   ├── rss/                      # Endpoint de sindicación de feeds XML
-│   │   └── sitemap/                  # Endpoint auxiliar para indexación SEO
 │   └── [locale]/                     # Layout Principal Localizado (Bilingüe es/en)
 │       ├── about/                    # Vista de Perfil Profesional (/about)
 │       ├── blog/                     # Módulo Visual de Blog
@@ -38,6 +32,8 @@ personal-page/src/
 │       │   └── page.tsx              # Vista General de Listado de Portafolio
 │       ├── layout.tsx                # Layout principal del idioma (inicializa tema y scripts)
 │       └── page.tsx                  # Vista de Portada Home
+│   ├── robots.ts                     # Generador de robots.txt estático/dinámico
+│   └── sitemap.ts                    # Generador de sitemap.xml localizado y bilingüe
 │
 ├── components/                       # Componentes Visuales Comunes y Reutilizables
 │   ├── about/                        # Componentes específicos de biografía y perfil
@@ -46,7 +42,6 @@ personal-page/src/
 │   ├── work/                         # Componentes específicos de portafolio (Projects)
 │   ├── Footer.tsx                    # Pie de página global (Once UI)
 │   ├── Header.tsx                    # Cabecera de navegación bilingüe global (Once UI)
-│   ├── Mailchimp.tsx                 # Formulario de suscripción a Newsletter
 │   ├── ProjectCard.tsx               # Tarjeta de proyecto de portafolio reutilizable
 │   ├── SeriesNav.tsx                 # Barra de navegación secuencial Once UI para series de posts/proyectos
 │   ├── ThemeToggle.tsx               # Switcher de tema visual (Dark/Light)
@@ -74,6 +69,8 @@ personal-page/src/
 │           └── T.tsx                 # Componente <T /> para traducciones dinámicas inline/diccionario
 │
 ├── resources/                        # Constantes y Configuraciones Estáticas de Negocio
+├── scripts/                          # Scripts Auxiliares de Construcción (Generación de RSS)
+│   └── generate-rss.ts               # Genera feeds rss.xml en public/ antes del build
 ├── types/                            # Definiciones y Tipados TypeScript Transversales
 └── utils/                            # Utilidades del Sistema (Escáner MDX, tests automatizados)
 ```

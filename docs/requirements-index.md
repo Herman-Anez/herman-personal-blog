@@ -45,8 +45,8 @@ Este documento define el índice de requisitos globales del sistema para el port
 ### 📦 5. Generación Estática Completa (Static HTML Export) — [RFG-05]
 - **Compilación 100% Estática**: El sistema debe generar la totalidad de sus páginas y recursos visuales como archivos estáticos puros HTML, CSS y JS (`output: 'export'`) para posibilitar su distribución global vía CDN sin backend activo en runtime.
 - **Pre-renderizado de Rutas Dinámicas**: El sistema debe pre-calcular y compilar de manera exhaustiva todas las combinaciones de idiomas y slugs en tiempo de build (`generateStaticParams()`).
-- **Endpoints Auxiliares Forzados**: El sistema debe exportar como recursos físicos estáticos los archivos XML/TXT de sindicación y SEO (RSS, Sitemap, `robots.txt`) forzando la compilación vía `force-static`.
-- **Assets de Build Offline**: La compilación completa no debe depender de servicios externos o conexiones HTTP activas; los assets dinámicos como imágenes de Open Graph deben ser autogenerados en disco de manera offline (ej. decodificando imágenes en base64 mediante `fs` local).
+- **Endpoints Auxiliares Forzados**: El sistema debe exportar como recursos físicos estáticos los archivos XML/TXT de sindicación y SEO (RSS, Sitemap, `robots.txt`) en tiempo de build.
+- **Assets de Build Offline**: La compilación completa no debe depender de servicios externos o conexiones HTTP activas; los assets dinámicos como imágenes de Open Graph deben ser autogenerados o referenciados a recursos locales estáticos.
 
 ---
 

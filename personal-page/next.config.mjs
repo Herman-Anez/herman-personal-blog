@@ -7,9 +7,13 @@ const withMDX = mdx({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Habilita la compilación estática nativa (HTML/CSS/JS puros) apta para CDNs como GitHub Pages
+  output: "export",
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   images: {
+    // Deshabilita la optimización dinámica en caliente al no contar con un servidor de Node en producción
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -18,6 +22,8 @@ const nextConfig = {
       },
     ],
   },
+  // Genera rutas estructuradas como '/ruta/index.html' en vez de '/ruta.html' para evitar fallos 404 al refrescar
+  trailingSlash: true,
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],

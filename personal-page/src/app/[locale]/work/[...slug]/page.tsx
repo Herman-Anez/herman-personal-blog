@@ -53,7 +53,7 @@ export async function generateMetadata({
     title: projectState.title,
     description: projectState.summary,
     baseURL: baseURL,
-    image: projectState.images[0] || `/api/og/generate?title=${projectState.title}`,
+    image: projectState.images[0] || `/images/og/home.jpg`,
     path: `/${locale}/work/${projectState.slug}`,
   });
 }
@@ -91,7 +91,7 @@ export default async function Project({
         datePublished={post.publishedAt}
         dateModified={post.publishedAt}
         image={
-          post.images[0] || `/api/og/generate?title=${encodeURIComponent(post.title)}`
+          post.images[0] || `/images/og/home.jpg`
         }
         author={{
           name: dict.person.name,

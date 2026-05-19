@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Writing about technology...</title>
+    <link>https://your-github-pages-url.com/en/blog</link>
+    <description>Articles written by Herman Añez</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 19 May 2026 18:52:46 GMT</lastBuildDate>
+    <atom:link href="https://your-github-pages-url.com/rss-en.xml" rel="self" type="application/rss+xml" />
+    <managingEditor>herman.anez.v@gmail.com (Herman Añez)</managingEditor>
+    <webMaster>herman.anez.v@gmail.com (Herman Añez)</webMaster>
+    <image>
+      <url>https://your-github-pages-url.com/images/avatar.jpg</url>
+      <title>Writing about technology...</title>
+      <link>https://your-github-pages-url.com/en/blog</link>
+    </image>
+    
+    <item>
+      <title>Prueba de Sistema i18n</title>
+      <link>https://your-github-pages-url.com/en/blog/test-i18n</link>
+      <guid>https://your-github-pages-url.com/en/blog/test-i18n</guid>
+      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Demostración del componente T híbrido y diccionarios modulares.]]></description>
+      
+      <category>Test</category>
+      <author>herman.anez.v@gmail.com (Herman Añez)</author>
+    </item>
+    <item>
+      <title>Magic Portfolio: Localization</title>
+      <link>https://your-github-pages-url.com/en/blog/localization</link>
+      <guid>https://your-github-pages-url.com/en/blog/localization</guid>
+      <pubDate>Tue, 15 Apr 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Información sobre la versión localizada de Magic Portfolio.]]></description>
+      
+      <category>Legacy</category>
+      <author>herman.anez.v@gmail.com (Herman Añez)</author>
+    </item>
+  </channel>
+</rss>

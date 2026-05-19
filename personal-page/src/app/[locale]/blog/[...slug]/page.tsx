@@ -56,7 +56,7 @@ export async function generateMetadata({
     title: postState.title,
     description: postState.summary,
     baseURL: baseURL,
-    image: postState.image || `/api/og/generate?title=${postState.title}`,
+    image: postState.image || `/images/og/home.jpg`,
     path: `/${locale}/blog/${postState.slug}`,
   });
 }
@@ -89,8 +89,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             datePublished={post.publishedAt}
             dateModified={post.publishedAt}
             image={
-              post.image ||
-              `/api/og/generate?title=${encodeURIComponent(post.title)}`
+              post.image || `/images/og/home.jpg`
             }
             author={{
               name: post.authorName || dict.person.name,

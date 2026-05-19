@@ -49,7 +49,7 @@ Contiene los adaptadores físicos del sistema (ej: cargadores de archivos físic
 ## 💾 Persistence Model
 
 ### 1. Compilación Estática (Build-Time Persistence)
-El almacenamiento primario reside en el sistema de archivos local (`/content/`). Durante la compilación, el cargador físico `mdxBlogRepository` actúa como adaptador de infraestructura, traduciendo los archivos Markdown a colecciones de objetos de dominio.
+El almacenamiento primario reside en el sistema de archivos local (`src/app/[locale]/blog/posts/` y `src/app/[locale]/work/projects/`). Durante la compilación, los cargadores físicos como `mdxBlogRepository` y `projectRepository` actúan como adaptadores de infraestructura, traduciendo los archivos Markdown a colecciones de objetos de dominio.
 
 ### 2. Persistencia en el Navegador (Futura Base de Datos Client-Side)
 Para futuros módulos interactivos y capacidades personalizadas (como el marcado de favoritos, historial de lectura offline o configuraciones avanzadas de accesibilidad), la arquitectura contempla la integración de persistencia del lado del cliente utilizando bases de datos integradas en el navegador (**IndexedDB / Web Storage**):
