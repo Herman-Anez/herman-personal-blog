@@ -5,7 +5,7 @@ import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { Metadata } from "next";
 import { projectRepository } from "@/modules/work/infrastructure/projectRepository";
 import { getWorkDetailCoordinator } from "@/modules/work/presentation/workCoordinator";
-import { WorkDetailView } from "@/components/work/WorkDetailView";
+import { WorkDetailView } from "@/components/layout-components/WorkDetailView";
 
 
 export async function generateStaticParams() {

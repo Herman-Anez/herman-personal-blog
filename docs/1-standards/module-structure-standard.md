@@ -8,7 +8,7 @@ Este estándar técnico define la organización estructural rígida que debe cum
 
 > [!IMPORTANT]
 > **Toda página o ruta física de Next.js (`page.tsx`) es únicamente un cascarón vacío de orquestación (Thin-Shell).**
-> Ningún archivo bajo `src/app/` debe contener JSX interactivo de dominio, ni maquetaciones de layouts, ni llamadas directas de i18n (`getDictionary`). Todo el renderizado se delega a un **View Component** dedicado bajo `src/components/` pasando los datos como `props`.
+> Ningún archivo bajo `src/app/` debe contener JSX interactivo de dominio, ni maquetaciones de layouts, ni llamadas directas de i18n (`getDictionary`). Todo el renderizado se delega a un **View Component** dedicado bajo `src/components/layout-components/` pasando los datos como `props`.
 
 ---
 
@@ -35,8 +35,8 @@ src/
 ├── app/[locale]/[nombre-ruta]/
 │   └── page.tsx                         # 1. EL SHELL (Next.js Page)
 │
-├── components/[nombre-modulo]/
-│   └── [Nombre]View.tsx                 # 2. LA VISTA (React Component)
+├── components/layout-components/
+│   └── [Nombre]View.tsx                 # 2. LA VISTA (React Component en Carpeta de Vistas)
 │
 ├── modules/[nombre-modulo]/             # 3. EL NEGOCIO (MVVM-C)
 │   ├── domain/
@@ -63,7 +63,7 @@ src/
   - Llamar al componente visual de Vista pasándole el estado serializado del ViewModel.
 - **Prohibido**: Renderizar JSX complejo de maquetación, realizar llamadas directas a i18n o interactuar con el filesystem (`fs`).
 
-### B. La Vista de Presentación (`src/components/...`)
+### B. La Vista de Presentación (`src/components/layout-components/...`)
 - **Función**: Renderizar la interfaz interactiva usando Once UI y maquetación visual adaptativa.
 - **Acciones Permitidas**:
   - Recibir todos los datos tipados como `props`.

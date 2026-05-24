@@ -1,7 +1,7 @@
 import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { BlogListView } from "@/components/blog/BlogListView";
+import { BlogListView } from "@/components/layout-components/BlogListView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;

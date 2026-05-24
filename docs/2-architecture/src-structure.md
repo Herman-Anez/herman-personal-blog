@@ -36,20 +36,18 @@ personal-page/src/
 │   └── sitemap.ts                    # Generador de sitemap.xml localizado y bilingüe
 │
 ├── components/                       # Componentes Visuales y Vistas del Sistema (Desacopladas de Next.js)
-│   ├── about/                        # Componentes específicos de biografía y perfil
-│   │   └── AboutView.tsx             # Vista de Presentación Pura de "Sobre Mí"
-│   ├── blog/                         # Componentes de renderizado de posts y listado
-│   │   ├── BlogListView.tsx          # Vista de Presentación Pura del Listado de Blog
-│   │   ├── BlogPostView.tsx          # Vista de Presentación Pura del Detalle de Artículo
-│   │   └── Posts.tsx                 # Grilla interna de posts
-│   ├── gallery/                      # Componentes de carrusel y visualización fotográfica
-│   │   └── GalleryView.tsx           # Vista de Presentación Pura de la Galería
-│   ├── site/                         # Componentes específicos del portal/home
-│   │   └── HomeView.tsx              # Vista de Presentación Pura de la Portada
-│   ├── work/                         # Componentes específicos de portafolio
-│   │   ├── WorkListView.tsx          # Vista de Presentación Pura de Lista de Proyectos
-│   │   ├── WorkDetailView.tsx        # Vista de Presentación Pura de Detalle de Proyecto
-│   │   └── Projects.tsx              # Grilla interna de proyectos
+│   ├── blog/                         # Componentes internos de renderizado de posts
+│   │   └── Posts.tsx                 # Grilla interna de listado de posts (Once UI)
+│   ├── work/                         # Componentes internos de portafolio
+│   │   └── Projects.tsx              # Grilla interna de proyectos (Once UI)
+│   ├── layout-components/            # Vistas de Presentación Pura (Pure View Components)
+│   │   ├── AboutView.tsx             # Vista de "Sobre Mí" (Biografía, habilidades, estudios)
+│   │   ├── BlogListView.tsx          # Vista de Listado de Blog
+│   │   ├── BlogPostView.tsx          # Vista de Detalle de Artículo
+│   │   ├── GalleryView.tsx           # Vista de la Galería Fotográfica
+│   │   ├── HomeView.tsx              # Vista de la Portada (Inicio)
+│   │   ├── WorkListView.tsx          # Vista de Listado de Proyectos
+│   │   └── WorkDetailView.tsx        # Vista de Ficha de Detalle de Proyecto
 │   ├── Footer.tsx                    # Pie de página global (Once UI)
 │   ├── Header.tsx                    # Cabecera de navegación bilingüe global (Once UI)
 │   ├── ProjectCard.tsx               # Tarjeta de proyecto de portafolio reutilizable

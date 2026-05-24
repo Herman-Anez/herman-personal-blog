@@ -2,7 +2,7 @@ import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getAboutCoordinator } from "@/modules/about/presentation/aboutCoordinator";
-import { AboutView } from "@/components/about/AboutView";
+import { AboutView } from "@/components/layout-components/AboutView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;

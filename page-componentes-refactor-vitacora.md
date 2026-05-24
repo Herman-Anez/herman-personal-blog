@@ -48,12 +48,13 @@ Para consolidar esta alineación, creamos e implementamos:
 
 | Componente | Ubicación | Responsabilidad |
 |---|---|---|
-| **`HomeView.tsx`** | `src/components/site/HomeView.tsx` | Renderiza la portada, badge interactivo de featured work, avatar animado, CTA y grillas de post/proyecto recientes. |
-| **`AboutView.tsx`** | `src/components/about/AboutView.tsx` | Encapsula el timeline profesional de experiencia laboral, instituciones de estudio, badges de destrezas técnicas, links de redes sociales y calendar. |
-| **`BlogListView.tsx`** | `src/components/blog/BlogListView.tsx` | Grilla responsiva que estructura los artículos bilingües clasificados por rango en el listado del blog. |
-| **`BlogPostView.tsx`** | `src/components/blog/BlogPostView.tsx` | Contiene el layout de lectura de un post individual, incluyendo metatags de autor, SeriesNav, CustomMDX, ShareSection y posts sugeridos. |
-| **`WorkListView.tsx`** | `src/components/work/WorkListView.tsx` | Encapsula el listado y grilla de proyectos del portafolio. |
-| **`WorkDetailView.tsx`** | `src/components/work/WorkDetailView.tsx` | Ficha técnica de visualización del proyecto individual, mostrando el equipo (`AvatarGroup`), multimedia, contenido dinámico MDX y proyectos relacionados. |
+| **`HomeView.tsx`** | `src/components/layout-components/HomeView.tsx` | Renderiza la portada, badge interactivo de featured work, avatar animado, CTA y grillas de post/proyecto recientes. |
+| **`AboutView.tsx`** | `src/components/layout-components/AboutView.tsx` | Encapsula el timeline profesional de experiencia laboral, instituciones de estudio, badges de destrezas técnicas, links de redes sociales y calendar. |
+| **`GalleryView.tsx`** | `src/components/layout-components/GalleryView.tsx` | Encapsula la visualización de la galería fotográfica de Next.js. |
+| **`BlogListView.tsx`** | `src/components/layout-components/BlogListView.tsx` | Grilla responsiva que estructura los artículos bilingües clasificados por rango en el listado del blog. |
+| **`BlogPostView.tsx`** | `src/components/layout-components/BlogPostView.tsx` | Contiene el layout de lectura de un post individual, incluyendo metatags de autor, SeriesNav, CustomMDX, ShareSection y posts sugeridos. |
+| **`WorkListView.tsx`** | `src/components/layout-components/WorkListView.tsx` | Encapsula el listado y grilla de proyectos del portafolio. |
+| **`WorkDetailView.tsx`** | `src/components/layout-components/WorkDetailView.tsx` | Ficha técnica de visualización del proyecto individual, mostrando el equipo (`AvatarGroup`), multimedia, contenido dinámico MDX y proyectos relacionados. |
 
 ---
 

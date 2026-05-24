@@ -5,7 +5,7 @@ import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { mdxBlogRepository } from "@/modules/blog/infrastructure/mdxRepository";
 import { getBlogPostCoordinator } from "@/modules/blog/presentation/blogCoordinator";
 import { Metadata } from "next";
-import { BlogPostView } from "@/components/blog/BlogPostView";
+import { BlogPostView } from "@/components/layout-components/BlogPostView";
 
 
 export async function generateStaticParams() {
