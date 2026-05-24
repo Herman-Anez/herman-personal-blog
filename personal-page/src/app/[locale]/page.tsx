@@ -1,11 +1,12 @@
 import { Meta, Schema } from "@once-ui-system/core";
 import { baseURL, routes } from "@/resources";
-import { getHomeViewModel } from "@/modules/site/presentation/viewModels/homeViewModel";
+import { getHomeCoordinator } from "@/modules/site/presentation/siteCoordinator";
 import { HomeView } from "@/components/site/HomeView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const { home } = await getHomeViewModel(resolvedParams.locale);
+  const flow = await getHomeCoordinator(resolvedParams.locale);
+  const home = flow.state.home;
 
   return Meta.generate({
     title: home.title,
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const { home, about, person, latestFromBlogText } = await getHomeViewModel(resolvedParams.locale);
+  const flow = await getHomeCoordinator(resolvedParams.locale);
+  const { home, about, person, latestFromBlogText } = flow.state;
   const showBlog = routes["/blog"];
 
   return (
@@ -47,3 +49,4 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     </>
   );
 }
+

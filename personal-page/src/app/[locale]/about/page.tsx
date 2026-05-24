@@ -1,12 +1,13 @@
 import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { getAboutViewModel } from "@/modules/about/presentation/viewModels/aboutViewModel";
+import { getAboutCoordinator } from "@/modules/about/presentation/aboutCoordinator";
 import { AboutView } from "@/components/about/AboutView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const { about } = await getAboutViewModel(resolvedParams.locale);
+  const flow = await getAboutCoordinator(resolvedParams.locale);
+  const about = flow.state.about;
 
   return Meta.generate({
     title: about.title,
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function About({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
   const { dict } = getSharedContext(resolvedParams.locale);
-  const { about, person, social } = await getAboutViewModel(resolvedParams.locale);
+  const flow = await getAboutCoordinator(resolvedParams.locale);
+  const { about, person, social } = flow.state;
 
   return (
     <Column maxWidth="m">

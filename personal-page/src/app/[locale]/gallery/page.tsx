@@ -1,12 +1,13 @@
 import { Flex, Meta, Schema } from "@once-ui-system/core";
 import GalleryView from "@/components/gallery/GalleryView";
 import { baseURL } from "@/resources";
-import { getGalleryViewModel } from "@/modules/about/presentation/viewModels/galleryViewModel";
+import { getGalleryCoordinator } from "@/modules/about/presentation/aboutCoordinator";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const gallery = await getGalleryViewModel(resolvedParams.locale);
+  const flow = await getGalleryCoordinator(resolvedParams.locale);
+  const gallery = flow.state;
 
   return Meta.generate({
     title: gallery.title,
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Gallery({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const gallery = await getGalleryViewModel(resolvedParams.locale);
+  const flow = await getGalleryCoordinator(resolvedParams.locale);
+  const gallery = flow.state;
   const { person } = getSharedContext(resolvedParams.locale);
   
   return (
@@ -41,4 +43,5 @@ export default async function Gallery({ params }: { params: Promise<{ locale: st
     </Flex>
   );
 }
+
 
