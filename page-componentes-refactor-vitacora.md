@@ -18,19 +18,27 @@ Esto dificultaba:
 
 **El Objetivo**: Reducir cada archivo `page.tsx` a un thin-shell puro de servidor y trasladar todo el renderizado JSX a componentes de vista dedicados y puros en `src/components`.
 
----
-
 ## 2. Estructura y Flujo Arquitectónico
 
-El flujo de renderizado de la aplicación se ha estandarizado bajo el siguiente esquema:
+Para cumplir de manera **estricta con el patrón MVVM-C (Model-View-ViewModel-Coordinator)** implementado en el portafolio, las páginas (`page.tsx`) tienen prohibido importar e invocar directamente los ViewModels (`homeViewModel`, `aboutViewModel`, `galleryViewModel`).
+
+En su lugar, toda interacción se realiza obligatoriamente a través de un **Coordinador de Orquestación**:
 
 ```
-Ruta Next.js (page.tsx) 
-       ⬇ [Resuelve parámetros / Metadata / Schema]
-Componente de Vista Pura (ej. AboutView.tsx)
-       ⬇ [Recibe datos como Props]
-Renderizado Visual en Cliente/Servidor (Once UI Components)
+Next.js page.tsx (View Shell)
+       ⬇ [Consulta flujo / Carga bilingüe]
+Coordinador del Módulo (ej. siteCoordinator / aboutCoordinator)
+       ⬇ [Instancia / Construye estado serializado]
+ViewModel (ej. homeViewModel / aboutViewModel / TS Puro)
+       ⬇ [Mapea datos de dominio e i18n]
+Cascarón de Página ➔ Renderiza Vista Pura (ej. HomeView.tsx)
 ```
+
+Para consolidar esta alineación, creamos e implementamos:
+- **`siteCoordinator.ts`** (`src/modules/site/presentation/siteCoordinator.ts`): Orquesta la portada cargando el flujo `HomeFlow`.
+- **`aboutCoordinator.ts`** (`src/modules/about/presentation/aboutCoordinator.ts`): Orquesta los flujos de biografía (`AboutFlow`) y galería fotográfica (`GalleryFlow`).
+- **Refactorización de Rutas**: Las páginas de `page.tsx` de Inicio, Sobre mí y Galería se actualizaron para consumir estos coordinadores, eliminando llamadas directas a ViewModels.
+
 
 ---
 
