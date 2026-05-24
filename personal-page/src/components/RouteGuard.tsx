@@ -6,6 +6,8 @@ import { routes, protectedRoutes } from "@/resources";
 import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-system/core";
 import NotFound from "@/app/(root)/not-found";
 
+import { getNavigationCoordinator } from "@/shared/coordinator/navigationCoordinator";
+
 interface RouteGuardProps {
   children: React.ReactNode;
 }
@@ -39,9 +41,10 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
           return routes[pathWithoutLocale as keyof typeof routes];
         }
 
-        const dynamicRoutes = ["/blog", "/work"] as const;
+        const nav = getNavigationCoordinator(isLocale ? locale : "es");
+        const dynamicRoutes = nav.dynamicBases;
         for (const route of dynamicRoutes) {
-          if (pathWithoutLocale?.startsWith(route) && routes[route]) {
+          if (pathWithoutLocale?.startsWith(route) && routes[route as keyof typeof routes]) {
             return true;
           }
         }

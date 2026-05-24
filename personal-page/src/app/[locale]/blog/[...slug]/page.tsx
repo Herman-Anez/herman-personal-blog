@@ -14,9 +14,9 @@ import {
   Line,
 } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { mdxBlogRepository } from "@/modules/blog/infrastructure/mdxRepository";
-import { getBlogPostViewModel } from "@/modules/blog/presentation/viewModels/blogPostViewModel";
+import { getBlogPostCoordinator } from "@/modules/blog/presentation/blogCoordinator";
 import { Metadata } from "next";
 import React from "react";
 import { Posts } from "@/components/blog/Posts";
@@ -49,8 +49,9 @@ export async function generateMetadata({
     : routeParams.slug || "";
   const locale = routeParams.locale;
 
-  const postState = await getBlogPostViewModel(slugPath, locale);
-  if (!postState) return {};
+  const flow = await getBlogPostCoordinator(slugPath, locale);
+  if (flow.type !== "post") return {};
+  const postState = flow.state;
 
   return Meta.generate({
     title: postState.title,
@@ -68,12 +69,13 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     : routeParams.slug || "";
   const locale = routeParams.locale;
 
-  const post = await getBlogPostViewModel(slugPath, locale);
-  if (!post) {
+  const flow = await getBlogPostCoordinator(slugPath, locale);
+  if (flow.type !== "post") {
     notFound();
   }
+  const post = flow.state;
 
-  const dict = getDictionary(locale);
+  const { dict } = getSharedContext(locale);
 
   return (
     <Row fillWidth>

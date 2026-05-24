@@ -5,8 +5,8 @@ node_modules/
 .vscode
 
 .agents
-
-
+.base
+.notas
 /.pnp
 .pnp.js
 
@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+vitacora-migration.md
+.gitignore
+context-migration.md
+migration-status.md
+.todo/readme
+docs/despliegue-github-pages.md
+.gitignore
+.gitignore
+context.md
+vitacora.md
+.gitignore
+docs/implementacion-estatica.md
+.gitignore
+docs/que-es-rss.md

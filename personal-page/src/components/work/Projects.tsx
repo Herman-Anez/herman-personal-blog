@@ -1,19 +1,20 @@
-import { getProjectListViewModel } from "@/modules/work/presentation/viewModels/projectListViewModel";
+import { getWorkListCoordinator } from "@/modules/work/presentation/workCoordinator";
 import { Column } from "@once-ui-system/core";
 import { ProjectCard } from "@/components";
 
 interface ProjectsProps {
-  range?: [number, number?];
+  range?: [number] | [number, number];
   exclude?: string[];
   locale?: string;
 }
 
 export async function Projects({ range, exclude, locale = "es" }: ProjectsProps) {
-  const displayedProjects = await getProjectListViewModel({
+  const flow = await getWorkListCoordinator({
     locale,
     range,
     exclude,
   });
+  const displayedProjects = flow.projects;
 
   return (
     <Column fillWidth gap="xl" marginBottom="40" paddingX="l">

@@ -55,9 +55,12 @@ personal-page/src/
 │       # Estructura Rígida Interna por Módulo:
 │       ├── domain/                   # Dominio Puro (Entidades, interfaces e invariantes sin dependencias)
 │       ├── infrastructure/           # Adaptadores Físicos (Lectura de MDX, mapeos y repositorios de disco)
-│       └── presentation/             # ViewModels (Aplanadores de estado y resolutores de traducción)
+│       └── presentation/             # ViewModels (Aplanadores de estado) y Coordinators de Módulo (Flujos)
 │
 ├── shared/                           # Utilidades y Componentes Transversales Compartidos
+│   ├── coordinator/                  # Coordinadores Compartidos Transversales
+│   │   ├── sharedCoordinator.ts      # Unifica el contexto compartido de persona e i18n
+│   │   └── navigationCoordinator.ts  # Mapa centralizado de navegación bilingüe
 │   ├── i18n/                         # Motor Central de Internacionalización
 │   │   ├── lang/                     # Dicionarios Modulares de Traducción
 │   │   │   ├── es/                   # Archivos JSON de Traducción al Español
@@ -83,7 +86,9 @@ El monorepo sigue los principios de desacoplamiento más rigurosos:
 
 1. **Desacoplamiento Visual / Ficheros**:
    Las vistas de React (`src/app/` y `src/components/`) **tienen prohibido** realizar lecturas físicas de archivos o importar librerías de infraestructura como `gray-matter` o `fs`.
-2. **Capa ViewModel como Puente**:
-   Los ViewModels de `src/modules/*/presentation/` son los únicos encargados de comunicarse con la infraestructura, aplanar metadatos complejos y traducir estados tipados antes de inyectarlos de forma pasiva a las Vistas React.
-3. **Internacionalización Desacoplada**:
+2. **Capa Coordinator como Orquestador de Flujo**:
+   Los coordinadores (`src/shared/coordinator/` y `src/modules/*/presentation/`) se interponen entre las páginas de Next.js y los ViewModels. Encapsulan las dependencias, el enrutamiento localizado y los flujos alternativos (ej: error 404).
+3. **Capa ViewModel como Transformador Puro**:
+   Los ViewModels de `src/modules/*/presentation/viewModels/` son funciones puras en TypeScript (`.ts`) que mapean metadatos y resuelven diccionarios de traducciones a objetos serializables libres de JSX y React.
+4. **Internacionalización Desacoplada**:
    El motor i18n (`src/shared/i18n/`) se ejecuta de manera independiente. El componente `<T />` y la factory `<CustomMDX />` inyectan el scope localizado sin interferir en los contratos de dominio.

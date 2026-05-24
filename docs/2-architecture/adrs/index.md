@@ -11,6 +11,7 @@ Record of architectural decisions for {{PROJECT_NAME}}. Each ADR documents a sig
 | 2026-05-16 | [Estrategia de Contenido MDX Multi-idioma Unificado](./20260516-mdx-content-strategy.md) | Accepted |
 | 2026-05-18 | [Arquitectura Limpia basada en DDD + MVVM](./20260518-ddd-mvvm-architecture.md) | Accepted |
 | 2026-05-18 | [Generación Estática Completa (Static HTML Export) y Despliegue en GitHub Pages](./20260518-static-export-github-pages.md) | Accepted |
+| 2026-05-24 | [Transición de MVVM a MVVM-C con Coordinadores y ViewModels Puros](./20260524-mvvm-c-architecture-coordinators.md) | Accepted |
 
 > Add one row per accepted ADR. Use the template below for each new one.
 

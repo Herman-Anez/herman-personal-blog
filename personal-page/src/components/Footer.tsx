@@ -1,33 +1,16 @@
 "use client";
 
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { useParams } from "next/navigation";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
   const params = useParams();
   const locale = (params?.locale as string) || "es";
-  const dict = getDictionary(locale);
+  const { person, social } = getSharedContext(locale);
 
-  const personName = dict.person.name;
-  const social = [
-    {
-      name: "GitHub",
-      icon: "github",
-      link: "https://github.com/placeholder",
-    },
-    {
-      name: "LinkedIn",
-      icon: "linkedin",
-      link: "https://www.linkedin.com/in/placeholder/",
-    },
-    {
-      name: "Email",
-      icon: "email",
-      link: `mailto:${dict.person.email}`,
-    },
-  ];
+  const personName = person.name;
 
   const currentYear = new Date().getFullYear();
 

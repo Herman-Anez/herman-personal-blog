@@ -12,12 +12,12 @@ import {
   Line,
 } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { ScrollToHash, CustomMDX, SeriesNav } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 import { projectRepository } from "@/modules/work/infrastructure/projectRepository";
-import { getProjectDetailViewModel } from "@/modules/work/presentation/viewModels/projectDetailViewModel";
+import { getWorkDetailCoordinator } from "@/modules/work/presentation/workCoordinator";
 export async function generateStaticParams() {
   const locales = ["es", "en"];
   const posts = projectRepository.getAllProjects();
@@ -46,8 +46,9 @@ export async function generateMetadata({
     : routeParams.slug || "";
   const locale = routeParams.locale;
 
-  const projectState = await getProjectDetailViewModel(slugPath, locale);
-  if (!projectState) return {};
+  const flow = await getWorkDetailCoordinator(slugPath, locale);
+  if (flow.type !== "detail") return {};
+  const projectState = flow.state;
 
   return Meta.generate({
     title: projectState.title,
@@ -69,13 +70,14 @@ export default async function Project({
     : routeParams.slug || "";
   const locale = routeParams.locale;
 
-  const post = await getProjectDetailViewModel(slugPath, locale);
+  const flow = await getWorkDetailCoordinator(slugPath, locale);
 
-  if (!post) {
+  if (flow.type !== "detail") {
     notFound();
   }
+  const post = flow.state;
 
-  const dict = getDictionary(locale);
+  const { dict } = getSharedContext(locale);
   const avatars = post.team.map((person) => ({
     src: person.avatar,
   }));

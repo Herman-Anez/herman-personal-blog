@@ -1,11 +1,11 @@
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { Projects } from "@/components/work/Projects";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const dict = getDictionary(resolvedParams.locale);
+  const { dict } = getSharedContext(resolvedParams.locale);
   const title = dict.work.title;
   const description = dict.work.description;
 
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Work({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const dict = getDictionary(resolvedParams.locale);
+  const { dict } = getSharedContext(resolvedParams.locale);
   const title = dict.work.title;
   const description = dict.work.description;
   const personName = dict.person.name;

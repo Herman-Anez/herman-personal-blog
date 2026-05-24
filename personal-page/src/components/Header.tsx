@@ -8,7 +8,8 @@ import { Fade, Flex, Line, Row, ToggleButton, Button } from "@once-ui-system/cor
 import { routes, display } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getNavigationCoordinator } from "@/shared/coordinator/navigationCoordinator";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 
 type TimeDisplayProps = {
   timeZone: string;
@@ -49,7 +50,9 @@ export const Header = () => {
   const router = useRouter();
   const locale = (params?.locale as string) || "es";
   
-  const dict = getDictionary(locale);
+  const { dict } = getSharedContext(locale);
+  const nav = getNavigationCoordinator(locale);
+
   const personLocation = dict.person.location;
   const aboutLabel = dict.about.label;
   const workLabel = dict.work.label;
@@ -106,7 +109,7 @@ export const Header = () => {
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href={`/${locale}`} selected={currentPath === "/"} />
+                <ToggleButton prefixIcon="home" href={nav.home} selected={currentPath === "/"} />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
@@ -114,7 +117,7 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="person"
-                      href={`/${locale}/about`}
+                      href={nav.about}
                       label={aboutLabel}
                       selected={currentPath === "/about"}
                     />
@@ -122,7 +125,7 @@ export const Header = () => {
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="person"
-                      href={`/${locale}/about`}
+                      href={nav.about}
                       selected={currentPath === "/about"}
                     />
                   </Row>
@@ -133,7 +136,7 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="grid"
-                      href={`/${locale}/work`}
+                      href={nav.work}
                       label={workLabel}
                       selected={currentPath.startsWith("/work")}
                     />
@@ -141,7 +144,7 @@ export const Header = () => {
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="grid"
-                      href={`/${locale}/work`}
+                      href={nav.work}
                       selected={currentPath.startsWith("/work")}
                     />
                   </Row>
@@ -152,7 +155,7 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="book"
-                      href={`/${locale}/blog`}
+                      href={nav.blog}
                       label={blogLabel}
                       selected={currentPath.startsWith("/blog")}
                     />
@@ -160,7 +163,7 @@ export const Header = () => {
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="book"
-                      href={`/${locale}/blog`}
+                      href={nav.blog}
                       selected={currentPath.startsWith("/blog")}
                     />
                   </Row>
@@ -171,7 +174,7 @@ export const Header = () => {
                   <Row s={{ hide: true }}>
                     <ToggleButton
                       prefixIcon="gallery"
-                      href={`/${locale}/gallery`}
+                      href={nav.gallery}
                       label={galleryLabel}
                       selected={currentPath.startsWith("/gallery")}
                     />
@@ -179,7 +182,7 @@ export const Header = () => {
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="gallery"
-                      href={`/${locale}/gallery`}
+                      href={nav.gallery}
                       selected={currentPath.startsWith("/gallery")}
                     />
                   </Row>
