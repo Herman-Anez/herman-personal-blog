@@ -88,7 +88,7 @@ export function BlogPostView({ post, locale, dict }: BlogPostViewProps) {
             </Column>
           )}
           <Column as="article" maxWidth="s">
-            <CustomMDX source={post.content} locale={locale} />
+            <CustomMDX source={post.content} locale={locale} currentPath={post.currentPath} />
           </Column>
 
           <ShareSection title={post.title} url={`${baseURL}/blog/${post.slug}`} />

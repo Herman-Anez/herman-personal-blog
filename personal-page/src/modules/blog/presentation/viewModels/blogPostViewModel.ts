@@ -17,6 +17,7 @@ export interface BlogPostViewState {
   family?: string;
   isIndex?: boolean;
   siblings?: Array<{ slug: string; title: string }>;
+  currentPath: string;
 }
 
 export const getBlogPostViewModel = async (
@@ -88,5 +89,6 @@ export const getBlogPostViewModel = async (
     content: post.content,
     authorName: dict.person.name,
     authorAvatar: "/images/avatar.jpg", // Adaptado de person.avatar
+    currentPath: `/${locale}/blog/${post.slug}`,
   };
 };
