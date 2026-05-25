@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { Posts } from "@/components/blog/Posts";
+import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
+import { BlogListView } from "@/components/layout-components/BlogListView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
@@ -24,6 +24,7 @@ export default async function Blog({ params }: { params: Promise<{ locale: strin
   const title = dict.blog.title;
   const description = dict.blog.description;
   const personName = dict.person.name;
+  const earlierPostsLabel = (dict.ui as any).earlierPosts || "Earlier posts";
   
   return (
     <Column maxWidth="m" paddingTop="24">
@@ -40,17 +41,11 @@ export default async function Blog({ params }: { params: Promise<{ locale: strin
           image: `${baseURL}/images/avatar.jpg`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">
-        {title}
-      </Heading>
-      <Column fillWidth flex={1} gap="40">
-        <Posts range={[1, 1]} thumbnail locale={resolvedParams.locale} />
-        <Posts range={[2, 3]} columns="2" thumbnail direction="column" locale={resolvedParams.locale} />
-        <Heading as="h2" variant="heading-strong-xl" marginLeft="l">
-          {(dict.ui as any).earlierPosts || "Earlier posts"}
-        </Heading>
-        <Posts range={[4]} columns="2" locale={resolvedParams.locale} />
-      </Column>
+      <BlogListView
+        title={title}
+        locale={resolvedParams.locale}
+        earlierPostsLabel={earlierPostsLabel}
+      />
     </Column>
   );
 }

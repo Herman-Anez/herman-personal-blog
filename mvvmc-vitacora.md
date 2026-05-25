@@ -59,6 +59,13 @@ Introdujimos una capa de **Coordinators** como funciones TypeScript livianas bil
   - Modificamos las páginas `page.tsx` de Inicio y About para recibir los strings crudos e instanciar en la vista el componente `<RenderHTML html={...} />`.
   - Rediseñamos el badge de *Featured Work* en `src/app/[locale]/page.tsx` para delegar su maquetación estructural a la vista React, recibiendo solo la etiqueta del ViewModel.
 
+### [Fase 6] Cierre de la Transición: Coordinadores para Home, About y Gallery (Alineación Estricta)
+* **Objetivo**: Garantizar la simetría absoluta de la arquitectura MVVM-C eliminando la invocación directa de ViewModels desde las páginas.
+* **Implementación**:
+  - Creamos `src/modules/site/presentation/siteCoordinator.ts` para encapsular la portada (`HomeFlow`).
+  - Creamos `src/modules/about/presentation/aboutCoordinator.ts` para unificar los flujos de sobre mí (`AboutFlow`) y galería (`GalleryFlow`).
+  - Refactorizamos las páginas `page.tsx` de Inicio, About y Galería para consumir exclusivamente estos coordinadores, logrando que el 100% de las rutas de Next.js se conecten única y estrictamente con la capa de Coordinators.
+
 ---
 
 ## 📈 Estado de Salud del Proyecto

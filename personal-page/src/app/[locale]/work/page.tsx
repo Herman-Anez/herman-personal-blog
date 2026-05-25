@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { Projects } from "@/components/work/Projects";
+import { WorkListView } from "@/components/layout-components/WorkListView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
@@ -40,10 +40,10 @@ export default async function Work({ params }: { params: Promise<{ locale: strin
           image: `${baseURL}/images/avatar.jpg`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {title}
-      </Heading>
-      <Projects locale={resolvedParams.locale} />
+      <WorkListView
+        title={title}
+        locale={resolvedParams.locale}
+      />
     </Column>
   );
 }

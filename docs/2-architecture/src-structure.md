@@ -35,11 +35,19 @@ personal-page/src/
 │   ├── robots.ts                     # Generador de robots.txt estático/dinámico
 │   └── sitemap.ts                    # Generador de sitemap.xml localizado y bilingüe
 │
-├── components/                       # Componentes Visuales Comunes y Reutilizables
-│   ├── about/                        # Componentes específicos de biografía y perfil
-│   ├── blog/                         # Componentes de renderizado de posts (Post, ShareSection)
-│   ├── gallery/                      # Componentes de carrusel y visualización fotográfica
-│   ├── work/                         # Componentes específicos de portafolio (Projects)
+├── components/                       # Componentes Visuales y Vistas del Sistema (Desacopladas de Next.js)
+│   ├── blog/                         # Componentes internos de renderizado de posts
+│   │   └── Posts.tsx                 # Grilla interna de listado de posts (Once UI)
+│   ├── work/                         # Componentes internos de portafolio
+│   │   └── Projects.tsx              # Grilla interna de proyectos (Once UI)
+│   ├── layout-components/            # Vistas de Presentación Pura (Pure View Components)
+│   │   ├── AboutView.tsx             # Vista de "Sobre Mí" (Biografía, habilidades, estudios)
+│   │   ├── BlogListView.tsx          # Vista de Listado de Blog
+│   │   ├── BlogPostView.tsx          # Vista de Detalle de Artículo
+│   │   ├── GalleryView.tsx           # Vista de la Galería Fotográfica
+│   │   ├── HomeView.tsx              # Vista de la Portada (Inicio)
+│   │   ├── WorkListView.tsx          # Vista de Listado de Proyectos
+│   │   └── WorkDetailView.tsx        # Vista de Ficha de Detalle de Proyecto
 │   ├── Footer.tsx                    # Pie de página global (Once UI)
 │   ├── Header.tsx                    # Cabecera de navegación bilingüe global (Once UI)
 │   ├── ProjectCard.tsx               # Tarjeta de proyecto de portafolio reutilizable
@@ -49,13 +57,30 @@ personal-page/src/
 │
 ├── modules/                          # Capas de Negocio del Sistema (Clean Architecture / DDD)
 │   ├── about/                        # Contexto Acotado: Perfil e Hitos Profesional
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── presentation/
+│   │       ├── aboutCoordinator.ts   # Coordinador de flujos de Biografía y Galería
+│   │       └── viewModels/           # ViewModels de About y Gallery (Pure TS)
 │   ├── blog/                         # Contexto Acotado: Artículos y Publicación Técnica
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── presentation/
+│   │       ├── blogCoordinator.ts    # Coordinador de flujos de Listado y Post Individual
+│   │       └── viewModels/           # ViewModels de Lista y Post (Pure TS)
 │   ├── site/                         # Contexto Acotado: Home, Layouts y Navegación
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── presentation/
+│   │       ├── siteCoordinator.ts    # Coordinador de flujo de Portada
+│   │       └── viewModels/           # ViewModels de Home y Layout (Pure TS)
 │   └── work/                         # Contexto Acotado: Proyectos Comerciales y Casos de Estudio
-│       # Estructura Rígida Interna por Módulo:
-│       ├── domain/                   # Dominio Puro (Entidades, interfaces e invariantes sin dependencias)
-│       ├── infrastructure/           # Adaptadores Físicos (Lectura de MDX, mapeos y repositorios de disco)
-│       └── presentation/             # ViewModels (Aplanadores de estado) y Coordinators de Módulo (Flujos)
+│       ├── domain/
+│       ├── infrastructure/
+│       └── presentation/
+│           ├── workCoordinator.ts    # Coordinador de flujos de Lista y Ficha de Proyecto
+│           └── viewModels/           # ViewModels de Lista y Detalle de Proyectos (Pure TS)
+
 │
 ├── shared/                           # Utilidades y Componentes Transversales Compartidos
 │   ├── coordinator/                  # Coordinadores Compartidos Transversales
