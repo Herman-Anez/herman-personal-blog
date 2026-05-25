@@ -20,6 +20,15 @@ export const ThemeToggle: React.FC = () => {
   const icon = currentTheme === "dark" ? "light" : "dark";
   const nextTheme = currentTheme === "light" ? "dark" : "light";
 
+  if (!mounted) {
+    return (
+      <ToggleButton
+        prefixIcon="light"
+        aria-label="Loading theme"
+      />
+    );
+  }
+
   return (
     <ToggleButton
       prefixIcon={icon}

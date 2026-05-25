@@ -13,20 +13,22 @@ Este proyecto adopta una arquitectura modular guiada por **Domain-Driven Design 
 
 ---
 
-## ⚙️ Architecture Layers (MVVM + Clean Architecture)
+## ⚙️ Architecture Layers (MVVM-C + Clean Architecture)
 
-El monorepo está organizado en cuatro capas concéntricas con dependencia hacia el interior:
+El monorepo está organizado en cinco capas concéntricas con dependencia hacia el interior:
 
 ```text
-[   Views (Once UI / JSX)   ]
+[      Views (Once UI)      ]
             ↓
-[       ViewModels          ]  ← Presentación
+[        Coordinators       ]  ← Orquestación de Navegación y Dependencias
             ↓
-[       Use Cases           ]  ← Aplicación
+[         ViewModels        ]  ← Presentación (TypeScript Puro)
+            ↓
+[         Use Cases         ]  ← Aplicación
             ↓
 [    Domain Core (Entities) ]  ← Dominio
             ↑
-[ Infrastructure Adapters   ]  ← Infraestructura (fs / MDX / Browser DB)
+[  Infrastructure Adapters  ]  ← Infraestructura (fs / MDX / Browser DB)
 ```
 
 ### 1. Domain Layer (Núcleo)
@@ -37,9 +39,10 @@ Contiene las entidades de negocio (`BlogPost`, `Project`), Value Objects (`Slug`
 Contiene los casos de uso específicos de la aplicación (ej: `ResolveModularI18n`).
 - **Regla**: Coordina el flujo de datos sin contener lógica de negocio directa.
 
-### 3. Presentation Layer (MVVM)
-- **Views (Vistas)**: Componentes declarativos React estructurados semánticamente mediante Once UI. Consumen estados planos libres de lógica de formateo.
-- **ViewModels**: Funciones asíncronas responsables de invocar los casos de uso, formatear fechas, estimar tiempos de lectura e inyectar scopes de i18n (`d`) devolviendo un objeto visual simple y tipado.
+### 3. Presentation Layer (MVVM-C)
+- **Views (Vistas)**: Componentes declarativos React estructurados semánticamente mediante Once UI. Reciben estados visuales serializados e inyectan HTML enriquecido mediante `<RenderHTML />`.
+- **Coordinators (Coordinadores)**: Funciones de TypeScript encargadas de resolver el ruteo localizado, unificar contextos compartidos (como `person` y `social`) y derivar los flujos de página (ej. listar posts vs detalle de post vs no-encontrado), protegiendo a las vistas del acoplamiento a los ViewModels.
+- **ViewModels**: Funciones asíncronas de TypeScript puro (libres de JSX o dependencias de React). Se encargan de estimar tiempos de lectura, formatear fechas, procesar traducciones dinámicas del diccionario y devolver un estado plano.
 
 ### 4. Infrastructure Layer
 Contiene los adaptadores físicos del sistema (ej: cargadores de archivos físicos Markdown en build-time).

@@ -1,4 +1,4 @@
-import { getBlogListViewModel } from "@/modules/blog/presentation/viewModels/blogListViewModel";
+import { getBlogListCoordinator } from "@/modules/blog/presentation/blogCoordinator";
 import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
 
@@ -19,11 +19,12 @@ export async function Posts({
   direction,
   locale = "es",
 }: PostsProps) {
-  const displayedBlogs = await getBlogListViewModel({
+  const flow = await getBlogListCoordinator({
     locale,
     range,
     exclude,
   });
+  const displayedBlogs = flow.posts;
 
   return (
     <>

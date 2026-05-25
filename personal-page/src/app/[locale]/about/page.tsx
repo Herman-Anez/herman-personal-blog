@@ -16,8 +16,9 @@ import { baseURL } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
-import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getAboutViewModel } from "@/modules/about/presentation/viewModels/aboutViewModel";
+import { RenderHTML } from "@/components/RenderHTML";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function About({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
-  const dict = getDictionary(resolvedParams.locale);
+  const { dict } = getSharedContext(resolvedParams.locale);
   const { about, person, social } = await getAboutViewModel(resolvedParams.locale);
 
   const structure = [
@@ -208,7 +209,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
 
           {about.intro.display && (
             <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
+              <RenderHTML html={about.intro.description as string} />
             </Column>
           )}
 
@@ -233,13 +234,13 @@ export default async function About({ params }: { params: Promise<{ locale: stri
                     </Text>
                     <Column as="ul" gap="16">
                       {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
+                        (achievement: any, index: number) => (
                           <Text
                             as="li"
                             variant="body-default-m"
                             key={`${experience.company}-${index}`}
                           >
-                            {achievement}
+                            <RenderHTML html={achievement} />
                           </Text>
                         ),
                       )}
@@ -283,7 +284,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
                       {institution.name}
                     </Text>
                     <Text variant="heading-default-xs" onBackground="neutral-weak">
-                      {institution.description}
+                      <RenderHTML html={institution.description as string} />
                     </Text>
                   </Column>
                 ))}
@@ -308,7 +309,7 @@ export default async function About({ params }: { params: Promise<{ locale: stri
                       {skill.title}
                     </Text>
                     <Text variant="body-default-m" onBackground="neutral-weak">
-                      {skill.description}
+                      <RenderHTML html={skill.description as string} />
                     </Text>
                     {skill.tags && skill.tags.length > 0 && (
                       <Row wrap gap="8" paddingTop="8">

@@ -30,6 +30,11 @@ La carpeta `/docs` actúa como la fuente de verdad técnica y de negocio del pro
 - [Directory Structure Map (src/)](./2-architecture/src-structure.md)
 - [Global Processes](./3-global-processes/readme.md)
 
+### 🚀 Despliegue y Arquitectura Estática
+- [Implementación de Exportación Estática](./implementacion-estatica.md) — Análisis de requerimientos funcionales estáticos (`output: 'export'`).
+- [Guía de Despliegue en GitHub Pages](./despliegue-github-pages.md) — Configuración del pipeline de CI/CD automatizado en la rama `publish`.
+- [¿Qué es RSS y cómo funciona?](./que-es-rss.md) — Fundamento educativo del feed XML autogenerado en prebuild.
+
 ---
 
 ## 📖 Recommended Reading Order
