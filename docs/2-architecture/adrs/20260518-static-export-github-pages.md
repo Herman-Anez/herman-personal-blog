@@ -33,7 +33,7 @@ Chosen option: **Option 2: Exportación Estática Completa**, porque cumple al 1
   - La protección por contraseña (`RouteGuard.tsx`) funciona puramente en el cliente validando contraseñas contra variables de entorno en build-time (`NEXT_PUBLIC_PAGE_ACCESS_PASSWORD`) y guardando sesiones en `localStorage`.
   - El feed RSS se genera offline antes de la compilación mediante un script Node (`generate-rss.ts` en la fase `prebuild`), escribiendo físicamente `rss.xml` y los localizados en `/public/` para que Next.js los exponga en la raíz estática del sitio.
   - Los ficheros `sitemap.xml` y `robots.txt` se compilan usando `export const dynamic = "force-static"` en `src/app/` para que Next.js los exporte nativamente en tiempo de build.
-- **Pipeline Automático**: Un workflow optimizado en GitHub Actions (`.github/workflows/deploy.yml`) automatiza el build y despliegue directo a la rama de producción de GitHub Pages ante cada push en `main`.
+- **Pipeline Automático**: Un workflow optimizado en GitHub Actions (`.github/workflows/deploy.yml`) automatiza el build y despliegue directo a la rama de producción de GitHub Pages ante cada push en `publish`.
 
 ### Negative Consequences
 
