@@ -10,6 +10,8 @@ export interface BlogItemState {
   image?: string;
   images: string[];
   tag?: string;
+  authorName: string;
+  authorAvatar: string;
 }
 
 interface BlogListParams {
@@ -66,7 +68,7 @@ export const getBlogListViewModel = async ({
     }
 
     return {
-      slug: post.slug,
+      slug: mdxBlogRepository.getSlugRegistry().getLocalizedSlug(post.slug, locale),
       title: resolveKey(dict, post.metadata.title),
       summary: resolveKey(dict, post.metadata.summary),
       publishedAt: post.metadata.publishedAt,
@@ -74,6 +76,8 @@ export const getBlogListViewModel = async ({
       image: post.metadata.image,
       images: post.metadata.images,
       tag: post.metadata.tag,
+      authorName: dict.person.name,
+      authorAvatar: "/images/avatar.jpg",
     };
   });
 };

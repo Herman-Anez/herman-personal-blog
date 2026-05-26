@@ -9,16 +9,19 @@ Este documento expone los componentes de infraestructura físicos y lógicos de 
 El sistema opera bajo un enfoque de **distribución estática descentralizada**, donde todos los recursos se procesan en tiempo de compilación para su alojamiento directo en red CDN.
 
 ### 1. Persistencia Física Local (Base de Datos de Disco)
-Los datos estructurados de artículos y proyectos residen en archivos locales `.mdx` dentro del directorio físico del monorepo en `personal-page/src/app/[locale]/blog/posts/` y `personal-page/src/app/[locale]/work/projects/`. 
-- **Adaptador de Lectura**: El repositorio de infraestructura (`mdxBlogRepository`) utiliza llamadas nativas del sistema de archivos de Node.js (`fs/promises`) y el parseador `gray-matter` para extraer el frontmatter e instanciar las entidades de dominio.
+Los datos estructurados de artículos y proyectos residen en archivos locales `.mdx` dentro del directorio `src/proto-pages/blog/posts/` y `src/proto-pages/work/projects/`. Al residir en `proto-pages/`, los archivos MDX quedan desacoplados de la jerarquía física del router de Next.js.
+- **Adaptador de Lectura**: El repositorio de infraestructura (`mdxBlogRepository` y `projectRepository`) utiliza llamadas nativas del sistema de archivos de Node.js (`fs`) y el parseador `gray-matter` para extraer el frontmatter (incluyendo el campo `slugs`) e instanciar las entidades de dominio.
+- **Slug Registry**: El campo `slugs: { es: "...", en: "..." }` del frontmatter es procesado por `SlugRegistry` para construir mapas de resolución de URLs localizadas en tiempo de build.
 
 ### 2. Procesador de Contenidos Interactivos (MDX Engine)
 El renderizado dinámico de Markdown con componentes interactivos se delega al compilador `next-mdx-remote`.
 - **Inyección de Scope**: La infraestructura inyecta el diccionario dinámico de i18n (`d`) dentro del contexto de compilación del artículo, permitiendo traducciones dinámicas en el cuerpo de Markdown en build time.
 
-### 3. Resolutor de Rutas Localizadas (Custom Link Factory)
-Para garantizar que el visitante mantenga su idioma preferente sin intervención de cookies ni variables runtime:
-- **Interceptor Nativo**: Se implementa un componente personalizado `createCustomLink` que intercepta toda navegación local e inyecta dinámicamente el prefijo de idioma correspondiente (`/[locale]/`) de forma transparente en tiempo de renderizado.
+### 3. Sistema de Enrutamiento Semántico Localizado
+Para garantizar que los visitantes accedan a URLs con slugs naturales en cada idioma (ej. `/es/sobre-mi`, `/en/about-me`):
+- **PageRouter** (`src/shared/routing/PageRouter.ts`): Singleton que centraliza el mapeo bidireccional entre identificadores canónicos de página (`pageId`) y sus slugs localizados mediante tres mapas: `esMap`, `enMap` e `idMap`.
+- **SlugRegistry** (`src/shared/slug/SlugRegistry.ts`): Complementa al `PageRouter` para el contenido dinámico MDX. Lee el campo `slugs: { es, en }` del frontmatter de cada post/proyecto y construye el mapeo localizado en tiempo de compilación.
+- **Catch-All Variádico** (`src/app/[locale]/[...slug]/page.tsx`): Única ruta de Next.js para secciones y contenido. Resuelve el `pageId` vía `PageRouter`, selecciona la proto-page adecuada y genera todas las permutaciones de rutas estáticas mediante `generateStaticParams()`.
 
 ### 4. Pipeline de Assets Offline y Codificación Gráfica
 Para garantizar la independencia de APIs de red durante el build y maximizar la resiliencia:

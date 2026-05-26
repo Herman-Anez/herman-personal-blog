@@ -28,7 +28,9 @@ La carpeta `/docs` actúa como la fuente de verdad técnica y de negocio del pro
 - [Global Requirements](./requirements-index.md)
 - [Architecture & Patterns](./2-architecture/arquitectura-y-patrones.md)
 - [Directory Structure Map (src/)](./2-architecture/src-structure.md)
+- [Visual Architecture Map & Flows](./2-architecture/workspace_architecture_graph.md) — Diagramas Mermaid de capas, enrutamiento y flujos.
 - [Global Processes](./3-global-processes/readme.md)
+
 
 ### 🚀 Despliegue y Arquitectura Estática
 - [Implementación de Exportación Estática](./implementacion-estatica.md) — Análisis de requerimientos funcionales estáticos (`output: 'export'`).

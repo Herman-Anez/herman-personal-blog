@@ -51,7 +51,7 @@ export const getProjectListViewModel = async ({
   const dict = getDictionary(locale);
 
   return displayedProjects.map((project) => ({
-    slug: project.slug,
+    slug: projectRepository.getSlugRegistry().getLocalizedSlug(project.slug, locale),
     title: resolveKey(dict, project.metadata.title),
     summary: resolveKey(dict, project.metadata.summary),
     publishedAt: project.metadata.publishedAt,

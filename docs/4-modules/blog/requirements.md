@@ -16,6 +16,8 @@ Definir los requerimientos funcionales, reglas de negocio y restricciones técni
 - **RF-BLOG-06 (Familias y Series de Posts)**: El sistema debe agrupar recursivamente archivos MDX dentro de subcarpetas en `posts/`, asignándoles propiedades de familia (`family`) e índice (`isIndex`) según su jerarquía de ficheros.
 - **RF-BLOG-07 (Navegación de Series - SeriesNav)**: El sistema debe renderizar un widget visual Once UI (`SeriesNav`) para guiar al usuario a través de todos los capítulos hermanos de una familia o serie de contenido.
 - **RF-BLOG-08 (Oclusión de Sibling en Listados - Opción A)**: El listado principal de posts en `/blog` debe ocluir las páginas secundarias de una familia para evitar ruido visual, exponiendo solo el índice principal o posts planos.
+- **RF-BLOG-09 (Resolución Dinámica de Enlaces)**: El sistema debe interceptar dinámicamente los enlaces (`<a>`) en el cuerpo del MDX para inyectar automáticamente el locale activo en enlaces absolutos locales y resolver enlaces relativos (`./`, `../`) contra el path absoluto del recurso actual (`currentPath`), garantizando una navegación coherente y fluida que retiene al usuario en su idioma actual.
+- **RF-BLOG-10 (Slugs de URL Localizados por Idioma)**: El sistema debe permitir definir slugs de URL semánticamente distintos para cada idioma en el frontmatter de cada post MDX (`slugs: { es: "...", en: "..." }`). La resolución de una URL `/[locale]/blog/[slug]` debe buscar el post cuyo slug localizado corresponda al locale activo. Si el campo `slugs` no está presente, el `pageId` canónico (nombre del archivo MDX) actúa como slug para todos los idiomas (retrocompatibilidad).
 
 ---
 
@@ -26,6 +28,8 @@ Definir los requerimientos funcionales, reglas de negocio y restricciones técni
 - **BR-BLOG-03 (Publicación No Futura)**: Las fechas de publicación (`publishedAt`) futuras no se exponen al usuario final en producción (mecanismo de programación estática).
 - **BR-BLOG-04 (Soporte Bilingüe)**: El cuerpo del post debe admitir interpolación de variables locales inyectando dinámicamente el diccionario `d` correspondiente al `locale` del visitante.
 - **BR-BLOG-05 (Orden de la Serie)**: Los capítulos de una serie dentro del widget `SeriesNav` se listan en orden cronológico ascendente (más antiguos primero) a excepción del post índice raíz, el cual se sitúa siempre al inicio de la lista.
+- **BR-BLOG-06 (Cálculo del Path en Presentación)**: El cálculo del path absoluto del recurso activo (`currentPath`) es responsabilidad exclusiva de la lógica de negocio pura del ViewModel (`blogPostViewModel.ts`), de forma que las vistas de React permanezcan pasivas y desacopladas de las reglas de enrutamiento del sistema de archivos.
+- **BR-BLOG-07 (Unicidad de Slugs por Locale)**: El slug localizado de un artículo debe ser único dentro de su idioma. No pueden existir dos posts cuyo `slugs.es` sean iguales, ni dos cuyo `slugs.en` sean iguales. El `SlugRegistry` debe detectar y reportar colisiones en tiempo de build. Un slug del idioma `A` puede coincidir con el slug del idioma `B` solo si pertenecen al mismo post (misma `pageId`).
 
 ---
 

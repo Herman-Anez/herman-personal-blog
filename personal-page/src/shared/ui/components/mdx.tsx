@@ -35,36 +35,63 @@ type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 /**
+ * Resuelve un href de MDX al path final localizado, soportando:
+ * - Fragmentos (#anchor): sin tocar (REQ-05)
+ * - Externos (http/https) y mailto: sin tocar (REQ-04)
+ * - Relativos (./  ../): resueltos contra currentPath (REQ-02)
+ * - Absolutos internos (/blog): prefijados con locale (REQ-03)
+ * - Ya localizados (/es/...): sin doble prefijo (REQ-06)
+ * Nunca incluye el basePath de Next.js (REQ-01).
+ */
+function resolveHref(
+  href: string,
+  locale?: string,
+  currentPath?: string
+): string {
+  // 1. Fragmentos — sin tocar
+  if (href.startsWith("#")) return href;
+
+  // 2. Externos y mailto — sin tocar
+  if (href.startsWith("http") || href.startsWith("mailto:")) return href;
+
+  // 3. Relativos (./ o ../)
+  if (href.startsWith("./") || href.startsWith("../")) {
+    const base = currentPath
+      ? `http://x${currentPath.endsWith("/") ? currentPath : currentPath + "/"}`
+      : `http://x/${locale ?? "es"}/`;
+    return new URL(href, base).pathname;
+  }
+
+  // 4. Absolutos internos — prefija locale si no lo tiene ya (REQ-03 + REQ-06)
+  const alreadyLocalized = locale ? href.startsWith(`/${locale}`) : false;
+  return locale && !alreadyLocalized ? `/${locale}${href}` : href;
+}
+
+/**
  * Factory que devuelve un CustomLink con el locale inyectado.
  * Úsala desde CustomMDX para que los links internos del MDX
  * sean localizados automáticamente (ej: /blog → /es/blog).
  */
-function createCustomLink(locale?: string) {
+function createCustomLink(locale?: string, currentPath?: string) {
   return function CustomLink({ href, children, ...props }: CustomLinkProps) {
-    if (href.startsWith("#")) {
+    const resolved = resolveHref(href, locale, currentPath);
+
+    if (resolved.startsWith("#")) {
+      return <a href={resolved} {...props}>{children}</a>;
+    }
+
+    if (resolved.startsWith("http") || resolved.startsWith("mailto:")) {
       return (
-        <a href={href} {...props}>
+        <a href={resolved} target="_blank" rel="noopener noreferrer" {...props}>
           {children}
         </a>
       );
     }
 
-    if (!href.startsWith("http") && !href.startsWith("mailto:")) {
-      // Evita doble prefijo si el href ya incluye el locale actual
-      const alreadyLocalized = locale ? href.startsWith(`/${locale}`) : false;
-      const localizedHref =
-        locale && !alreadyLocalized ? `/${locale}${href}` : href;
-      return (
-        <SmartLink href={localizedHref} {...props}>
-          {children}
-        </SmartLink>
-      );
-    }
-
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+      <SmartLink href={resolved} {...props}>
         {children}
-      </a>
+      </SmartLink>
     );
   };
 }
@@ -235,9 +262,11 @@ const components = {
 type CustomMDXProps = MDXRemoteProps & {
   components?: typeof components;
   locale?: string;
+  /** Ruta activa del post (ej. "/es/blog/mi-post") para resolver links relativos. REQ-01/02. */
+  currentPath?: string;
 };
 
-export function CustomMDX({ locale, ...props }: CustomMDXProps) {
+export function CustomMDX({ locale, currentPath, ...props }: CustomMDXProps) {
   const dictionary = locale ? getDictionary(locale) : {};
   return (
     <MDXRemote
@@ -247,9 +276,9 @@ export function CustomMDX({ locale, ...props }: CustomMDXProps) {
       {...props}
       components={{
         ...components,
-        // Inyecta el locale en el mapper de <a> para que los links
-        // internos escritos en MDX queden prefijados automáticamente
-        a: createCustomLink(locale) as any,
+        // Inyecta locale + currentPath en el mapper de <a> para que los links
+        // internos queden localizados y los relativos correctamente resueltos
+        a: createCustomLink(locale, currentPath) as any,
         ...(props.components || {}),
       }}
     />
