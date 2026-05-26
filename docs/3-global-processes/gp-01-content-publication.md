@@ -25,7 +25,8 @@ sequenceDiagram
     participant github as GitHub Actions (CI)
     participant cdn as CDN (GitHub Pages)
 
-    Autor->>local: Crea /content/blog/un-post.mdx con metadatos YAML
+    Autor->>local: Crea src/proto-pages/blog/posts/un-post.mdx con metadatos YAML
+    Autor->>local: Define slugs localizados en frontmatter (slugs: { es: "mi-url", en: "my-url" })
     Autor->>local: Agrega interpolaciones bilingües {d.blog.key}
     Autor->>local: Ejecuta git commit -m "feat: new post"
     
@@ -54,7 +55,13 @@ sequenceDiagram
 ### 1. Redacción Física del Artículo
 - **Actor:** Autor (Herman)
 - **Módulo:** `blog` o `work`
-- **Acción:** Creación física del archivo `.mdx` local en el monorepo. Se definen las metadatos obligatorios en el frontmatter (invariante: `title`, `summary`, `publishedAt` e idiomas válidos).
+- **Acción:** Creación física del archivo `.mdx` en `src/proto-pages/blog/posts/` (blog) o `src/proto-pages/work/projects/` (work). Se definen las metadatos obligatorios en el frontmatter (invariante: `title`, `summary`, `publishedAt`, al menos un `tag`) y el campo de slugs localizados:
+  ```yaml
+  slugs:
+    es: "mi-articulo-en-espanol"
+    en: "my-article-in-english"
+  ```
+  Si el campo `slugs` se omite, el nombre del archivo actúa como slug universal (retrocompatibilidad).
 
 ### 2. Formateo y Verificación Local
 - **Actor:** Husky (Git Hook)

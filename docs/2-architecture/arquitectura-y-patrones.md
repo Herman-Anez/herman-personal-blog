@@ -52,7 +52,7 @@ Contiene los adaptadores físicos del sistema (ej: cargadores de archivos físic
 ## 💾 Persistence Model
 
 ### 1. Compilación Estática (Build-Time Persistence)
-El almacenamiento primario reside en el sistema de archivos local (`src/app/[locale]/blog/posts/` y `src/app/[locale]/work/projects/`). Durante la compilación, los cargadores físicos como `mdxBlogRepository` y `projectRepository` actúan como adaptadores de infraestructura, traduciendo los archivos Markdown a colecciones de objetos de dominio.
+El almacenamiento primario reside en el sistema de archivos local (`src/proto-pages/blog/posts/` y `src/proto-pages/work/projects/`). Durante la compilación, los cargadores físicos como `mdxBlogRepository` y `projectRepository` actúan como adaptadores de infraestructura, traduciendo los archivos Markdown a colecciones de objetos de dominio. El campo `slugs: { es, en }` del frontmatter es extraído por `SlugRegistry` para construir los mapas de resolución de URLs localizadas.
 
 ### 2. Persistencia en el Navegador (Futura Base de Datos Client-Side)
 Para futuros módulos interactivos y capacidades personalizadas (como el marcado de favoritos, historial de lectura offline o configuraciones avanzadas de accesibilidad), la arquitectura contempla la integración de persistencia del lado del cliente utilizando bases de datos integradas en el navegador (**IndexedDB / Web Storage**):
@@ -60,6 +60,16 @@ Para futuros módulos interactivos y capacidades personalizadas (como el marcado
 - **Arquitectura Decoplada**: El acceso a la base de datos del navegador se implementará mediante un puerto (`ClientPersistenceRepository`) en la capa de infraestructura.
 - **Uso de Wrappers Livianos**: Se priorizará el uso de wrappers nativos tipados (como `Dexie.js` para IndexedDB o almacenamiento en `localStorage`) para evitar sobrecargar el bundle de Javascript de cliente.
 - **Invariantes Protegidos**: Los datos persistidos localmente en el navegador se validarán a través de las entidades de dominio antes de ser consumidos por los ViewModels, garantizando que el estado local del cliente sea siempre consistente con las reglas globales.
+
+---
+
+## 🗺️ Sistema de Enrutamiento Semántico Localizado
+
+Una capa transversal de infraestructura gestiona la resolución de URLs bilingues de forma centralizada:
+
+- **`PageRouter`** (`src/shared/routing/PageRouter.ts`): Singleton que mapea `pageId` canónico ↔ slug localizado para secciones estáticas. Expone `resolveRoute(slug, locale)` y `getLocalizedSlug(pageId, locale)`. Es la fuente de verdad para construir cualquier URL del sitio.
+- **`SlugRegistry`** (`src/shared/slug/SlugRegistry.ts`): Registro dinámico que lee el campo `slugs: { es: "...", en: "..." }` del frontmatter de cada MDX y construye mapas de resolución para contenido dinámico (posts y proyectos).
+- **Catch-All Universal** (`src/app/[locale]/[...slug]/page.tsx`): Única ruta de Next.js para todo el contenido de secciones. Delega la resolución al `PageRouter` y carga dinámicamente las **proto-pages** correspondientes mediante importaciones lazy.
 
 ---
 
