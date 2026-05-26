@@ -14,6 +14,7 @@ export interface ProjectDetailViewState {
   family?: string;
   isIndex?: boolean;
   siblings?: Array<{ slug: string; title: string }>;
+  currentPath: string;
 }
 
 export const getProjectDetailViewModel = async (
@@ -80,5 +81,6 @@ export const getProjectDetailViewModel = async (
     })) || [],
     link: project.metadata.link,
     content: project.content,
+    currentPath: `/${locale}/work/${project.slug}`,
   };
 };
