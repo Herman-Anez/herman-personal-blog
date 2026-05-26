@@ -21,11 +21,11 @@ export interface BlogPostViewState {
 }
 
 export const getBlogPostViewModel = async (
-  slug: string,
+  localizedSlug: string,
   locale: string
 ): Promise<BlogPostViewState | null> => {
   // 1. Obtener la entidad de dominio
-  const post = mdxBlogRepository.getPostBySlug(slug);
+  const post = mdxBlogRepository.getPostByLocalizedSlug(localizedSlug, locale);
   if (!post) return null;
 
   // 2. Resolver diccionarios de i18n
@@ -68,13 +68,13 @@ export const getBlogPostViewModel = async (
     });
 
     siblings = familyPosts.map((p) => ({
-      slug: p.slug,
+      slug: mdxBlogRepository.getSlugRegistry().getLocalizedSlug(p.slug, locale),
       title: resolveKey(dict, p.metadata.title),
     }));
   }
 
   return {
-    slug: post.slug,
+    slug: mdxBlogRepository.getSlugRegistry().getLocalizedSlug(post.slug, locale),
     family: post.family,
     isIndex: post.isIndex,
     siblings,

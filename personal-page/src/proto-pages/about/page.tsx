@@ -3,10 +3,10 @@ import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getAboutCoordinator } from "@/modules/about/presentation/aboutCoordinator";
 import { AboutView } from "@/components/layout-components/AboutView";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const flow = await getAboutCoordinator(resolvedParams.locale);
+export async function generateMetadata({ locale }: { locale: string }) {
+  const flow = await getAboutCoordinator(locale);
   const about = flow.state.about;
 
   return Meta.generate({
@@ -14,14 +14,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: about.description,
     baseURL: baseURL,
     image: `/images/og/home.jpg`,
-    path: `/${resolvedParams.locale}${about.path}`,
+    path: `/${locale}/${getLocalizedSlug("about", locale)}`,
   });
 }
 
-export default async function About({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { dict } = getSharedContext(resolvedParams.locale);
-  const flow = await getAboutCoordinator(resolvedParams.locale);
+export default async function AboutProtoPage({ locale }: { locale: string }) {
+  const { dict } = getSharedContext(locale);
+  const flow = await getAboutCoordinator(locale);
   const { about, person, social } = flow.state;
 
   return (
@@ -31,11 +30,11 @@ export default async function About({ params }: { params: Promise<{ locale: stri
         baseURL={baseURL}
         title={about.title}
         description={about.description}
-        path={about.path}
+        path={`/${getLocalizedSlug("about", locale)}`}
         image={`/images/og/home.jpg`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("about", locale)}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />

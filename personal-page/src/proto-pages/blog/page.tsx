@@ -2,10 +2,10 @@ import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { BlogListView } from "@/components/layout-components/BlogListView";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { dict } = getSharedContext(resolvedParams.locale);
+export async function generateMetadata({ locale }: { locale: string }) {
+  const { dict } = getSharedContext(locale);
   const title = dict.blog.title;
   const description = dict.blog.description;
 
@@ -14,13 +14,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description,
     baseURL: baseURL,
     image: `/images/og/home.jpg`,
-    path: `/${resolvedParams.locale}/blog`,
+    path: `/${locale}/${getLocalizedSlug("blog", locale)}`,
   });
 }
 
-export default async function Blog({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { dict } = getSharedContext(resolvedParams.locale);
+export default async function BlogListProtoPage({ locale }: { locale: string }) {
+  const { dict } = getSharedContext(locale);
   const title = dict.blog.title;
   const description = dict.blog.description;
   const personName = dict.person.name;
@@ -33,17 +32,17 @@ export default async function Blog({ params }: { params: Promise<{ locale: strin
         baseURL={baseURL}
         title={title}
         description={description}
-        path={`/blog`}
+        path={`/${getLocalizedSlug("blog", locale)}`}
         image={`/images/og/home.jpg`}
         author={{
           name: personName,
-          url: `${baseURL}/blog`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("blog", locale)}`,
           image: `${baseURL}/images/avatar.jpg`,
         }}
       />
       <BlogListView
         title={title}
-        locale={resolvedParams.locale}
+        locale={locale}
         earlierPostsLabel={earlierPostsLabel}
       />
     </Column>

@@ -1,33 +1,21 @@
-# {{MODULE_NAME}} — Quality Attributes
-
-## Integrity
-
-- Business invariants are enforced within the `{{AGGREGATE_ROOT}}` aggregate root.
-- No external module can directly mutate the state of this bounded context's aggregates.
-
-## Auditability
-
-- All creates, updates, and relevant state transitions must be logged.
-- Critical operations must include `correlationId` for distributed traceability.
-
-## Resilience
-
-- **Event publishing:** Uses {{PUBLISHING_PATTERN}} (e.g., Outbox pattern) to guarantee at-least-once event delivery.
-- **Retry policy:** Async consumers must implement exponential backoff on transient failures.
-- **Idempotency:** All event consumers must be idempotent — duplicate delivery has no side effects.
-
-## Security
-
-- **Access control:** RBAC enforced on all endpoints. Permissions required: `{{MODULE_SLUG}}:{{resource}}:read`, `{{MODULE_SLUG}}:{{resource}}:write`.
-- **PII protection:** Sensitive fields ({{PII_FIELDS}}) must not be included in integration events unless strictly necessary.
-- **M2M authentication:** Synchronous calls from other modules require ephemeral JWT (Client Credentials flow).
+# Work — Quality Attributes
 
 ## Performance
 
-- Operational read queries ({{COMMON_QUERIES}}) must respond within acceptable times for normal administrative use.
-- Complex read projections bypass the domain model (CQRS read side) for performance.
+- **Static Generation (SSG):** Al igual que el blog, el portafolio de trabajo está pre-renderizado. La carga de vistas de galería y casos de estudio es inmediata.
+- **Asset Co-location:** Las imágenes de proyectos están organizadas jerárquicamente, permitiendo optimización estática y cargas de recursos eficientes (LCP bajo).
+
+## Maintainability & Integrity
+
+- **Family Sub-routing:** La integridad jerárquica de proyectos y sub-proyectos está garantizada por el esquema de `ProjectRepository`.
+- **Content Decoupling:** Los casos de estudio escritos en MDX no dependen de componentes React específicos, facilitando la refactorización visual global.
+
+## SEO & Rich Media
+
+- **Open Graph Ready:** Cada proyecto exporta metadatos OG predictivos (usando imágenes estáticas) para maximizar el impacto visual al compartirse en redes sociales.
+- **Semantic HTML:** Las Vistas del portafolio inyectan esquemas semánticos (JSON-LD) para mejorar la lectura por parte de indexadores.
 
 ## Related documents
 
 - [Infrastructure](./infrastructure.md)
-- [Global quality attributes](../../2-architecture/quality-attributes.md)
+- [Architecture and Patterns](../../../2-architecture/arquitectura-y-patrones.md)

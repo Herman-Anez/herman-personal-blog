@@ -1,4 +1,4 @@
-# {{MODULE_NAME}} — C4 Component Diagram (Level 3)
+# Work — C4 Component Diagram (MVVM-C)
 
 ## Component Diagram
 
@@ -6,31 +6,29 @@
 @startuml C4_Elements
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-title Components - {{MODULE_NAME}}
+title Components - Work Module (Frontend MVVM-C)
 
-Container_Boundary(mod, "{{MODULE_NAME}}") {
-    Component(api, "API Layer", "REST/gRPC", "Exposes use cases to the outside")
-    Component(app, "Application Services", "Service", "Orchestrates use cases and domain logic")
-    Component(domain, "Domain Model", "Logic", "Invariants, aggregates, and business rules")
-    Component(infra, "Infrastructure", "Adapter", "DB, Broker, external service adapters")
+Container_Boundary(mod, "Work Module") {
+    Component(view, "Work Views", "React Server Component", "WorkListView, WorkDetailView (Thin Shells)")
+    Component(coord, "WorkCoordinator", "TypeScript", "Orchestrates portfolio navigation and flow")
+    Component(vm, "Work ViewModels", "TypeScript", "Transforms project data into presentation state")
+    Component(repo, "ProjectRepository", "TypeScript", "Adapts MDX case studies and families")
 }
 
-ContainerDb(db, "{{MODULE_NAME}} Database", "PostgreSQL", "Persistent storage for this bounded context")
-ContainerDb(msg_bus, "Message Broker", "RabbitMQ", "Event bus for async integration")
+ContainerDb(fs, "Local Filesystem", "MDX", "src/proto-pages/work/projects/")
 
-Rel(api, app, "Invokes use cases")
-Rel(app, domain, "Uses domain model")
-Rel(app, infra, "Implements via interfaces (ports)")
-Rel(infra, db, "Writes/Reads", "SQL")
-Rel(infra, msg_bus, "Publishes/Consumes events", "AMQP")
+Rel(view, coord, "Invokes for data and actions")
+Rel(coord, vm, "Injects data and dependencies into")
+Rel(vm, repo, "Fetches raw project data from")
+Rel(repo, fs, "Reads files via", "fs / gray-matter")
 @enduml
 ```
 
 ## Highlighted components
 
-- **API Layer:** Receives HTTP/gRPC requests, validates input, delegates to Application Services.
-- **Application Services:** Coordinate use cases, enforce transaction boundaries.
-- **Domain Model:** Contains aggregates, entities, value objects, and domain events.
-- **Infrastructure:** Implements repository interfaces, event publishers, and external adapters.
+- **Work Views:** Módulos de presentación basados en Once UI para exponer casos de estudio y el portfolio.
+- **WorkCoordinator:** Coordina la vista de lista de proyectos vs vista de detalle, inyectando las dependencias globales compartidas (como redes sociales para compartir el post).
+- **ViewModels:** Formatean datos complejos de los proyectos (tecnologías, links, galerías) en *props* planas.
+- **ProjectRepository:** Maneja la lógica de anidación de familias de subproyectos e indexación física.
 
 [back](../readme.md)

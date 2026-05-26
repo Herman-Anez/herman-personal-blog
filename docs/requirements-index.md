@@ -24,9 +24,12 @@ Este documento define el índice de requisitos globales del sistema para el port
 
 ### 🌍 1. Internacionalización Bilingüe (i18n) — Requisito Funcional Global [RFG-01]
 - **Bilingüismo Unificado**: Toda sección visible de la web debe estar disponible en Español (`es`) e Inglés (`en`).
-- **Navegación e Indexación Localizada**: Las rutas deben estructurarse de manera rígida mediante `/[locale]/` para asegurar que los motores de búsqueda indexen ambas versiones de manera independiente.
-- **Estrategia de Fallbacks**: Si falta una llave de traducción en el idioma preferente, el sistema debe degradarse elegantemente recorriendo la jerarquía de 5 niveles para no romper la interfaz.
-- **Traducciones MDX en Scope**: El motor de renderizado de Markdown debe permitir inyectar variables idiomáticas dinámicas en el cuerpo de los artículos utilizando el diccionario `d`.
+- **Navegación e Indexación Localizada**: Las rutas se estructuran mediante `/[locale]/[slug-localizado]` para asegurar que los motores de búsqueda indexen ambas versiones de manera independiente con URLs semánticas en cada idioma.
+- **Slugs Semánticos de Sección** (`PageRouter`): El sistema dispone de un registro centralizado (`src/shared/routing/PageRouter.ts`) que mapea identificadores canónicos de sección (`pageId`) a sus slugs localizados (ej. `"about"` → `"sobre-mi"` / `"about-me"`). Esto permite que las URLs de sección sean naturales y significativas en cada idioma.
+- **Slugs Semánticos de Contenido MDX** (`SlugRegistry`): El campo `slugs: { es: "...", en: "..." }` en el frontmatter de cada post/proyecto define el slug localizado independiente para cada idioma. El `SlugRegistry` (`src/shared/slug/SlugRegistry.ts`) centraliza la resolución bidireccional de estos slugs en tiempo de build.
+- **Estrategia de Fallbacks de Traducción**: Si falta una llave de traducción en el idioma preferente, el sistema se degrada elegantemente recorriendo la jerarquía de 5 niveles de fallback para no romper la interfaz.
+- **Traducciones MDX en Scope**: El motor de renderizado de Markdown permite inyectar variables idiomáticas dinámicas en el cuerpo de los artículos utilizando el diccionario `d` y el componente `<T />` para etiquetas bilingües inline.
+- **Enrutamiento Semántico Localizado** (Catch-All): Todo el contenido del sitio (excepto Home) se sirve a través de un único catch-all `src/app/[locale]/[...slug]/page.tsx` que resuelve el `pageId` y carga dinámicamente el componente `proto-page` correcto, garantizando rutas limpias y 100% estáticas en todas las combinaciones de idioma y slug.
 
 ### ✍️ 2. Blog Técnico [RFG-02]
 - **Artículos en MDX**: Creación de posts mediante archivos físicos unificados con metadatos estructurados en frontmatter.

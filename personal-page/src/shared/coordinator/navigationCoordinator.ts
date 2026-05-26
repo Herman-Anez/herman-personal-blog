@@ -1,3 +1,5 @@
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
+
 export interface AppNavigation {
   home: string;
   about: string;
@@ -22,11 +24,11 @@ export function getNavigationCoordinator(locale: string): AppNavigation {
   const base = `/${locale}`;
   return {
     home: `${base}`,
-    about: `${base}/about`,
-    work: `${base}/work`,
-    blog: `${base}/blog`,
-    gallery: `${base}/gallery`,
-    workFeatured: `${base}/work/${FEATURED_WORK_SLUG}`,
-    dynamicBases: [ROUTE_MAP.blog, ROUTE_MAP.work],
+    about: `${base}/${getLocalizedSlug("about", locale)}`,
+    work: `${base}/${getLocalizedSlug("work", locale)}`,
+    blog: `${base}/${getLocalizedSlug("blog", locale)}`,
+    gallery: `${base}/${getLocalizedSlug("gallery", locale)}`,
+    workFeatured: `${base}/${getLocalizedSlug("work", locale)}/${FEATURED_WORK_SLUG}`,
+    dynamicBases: [`/${getLocalizedSlug("blog", locale)}`, `/${getLocalizedSlug("work", locale)}`],
   };
 }

@@ -7,22 +7,22 @@ Este estándar técnico define la organización estructural rígida que debe cum
 ## 1. Regla de Oro del Desarrollo Modular
 
 > [!IMPORTANT]
-> **Toda página o ruta física de Next.js (`page.tsx`) es únicamente un cascarón vacío de orquestación (Thin-Shell).**
-> Ningún archivo bajo `src/app/` debe contener JSX interactivo de dominio, ni maquetaciones de layouts, ni llamadas directas de i18n (`getDictionary`). Todo el renderizado se delega a un **View Component** dedicado bajo `src/components/layout-components/` pasando los datos como `props`.
+> **El único punto de entrada en Next.js para el contenido de secciones es el catch-all `src/app/[locale]/[...slug]/page.tsx`.**
+> Este shell es el único archivo bajo `src/app/[locale]/` (además del `page.tsx` de Home). Las vistas visuales de cada sección (About, Blog, Gallery, Work) residen en `src/proto-pages/` como Server Components puros desacoplados de Next.js. Ningún JSX de maquetación, llamada a i18n ni coordinador de negocio existe en el shell; todo se delega.
 
 ---
 
 ## 2. Mapa de Asociación por Módulo
 
-El portafolio se divide en **4 contextos acotados principales** (módulos). Cada uno tiene un mapeo rígido uno-a-uno entre sus capas de lógica, vistas y rutas físicas:
+El portafolio se divide en **4 contextos acotados principales** (módulos). Cada uno tiene un mapeo rígido entre su lógica de negocio y su vista de presentación, orquestados por el shell catch-all universal:
 
-| Módulo (Negocio / Datos) | Vista Reutilizable (UI Pura) | Ruta Asociada (Shell Next.js) | Archivo i18n de Rutas |
+| Módulo (Negocio / Datos) | Vista Reutilizable (Proto-Page) | Shell Universal (Next.js) | Archivo i18n de Sección |
 |---|---|---|---|
-| **`src/modules/site`** | `HomeView.tsx` | `src/app/[locale]/page.tsx` | `lang/[es/en]/home/page.json` |
-| **`src/modules/about`** | `AboutView.tsx` | `src/app/[locale]/about/page.tsx` | `lang/[es/en]/about/page.json` |
-| **`src/modules/about`** | `GalleryView.tsx` | `src/app/[locale]/gallery/page.tsx` | `lang/[es/en]/gallery/page.json` |
-| **`src/modules/blog`** | `BlogListView.tsx`<br>`BlogPostView.tsx` | `src/app/[locale]/blog/page.tsx`<br>`src/app/[locale]/blog/[...slug]/page.tsx` | `lang/[es/en]/blog/page.json` |
-| **`src/modules/work`** | `WorkListView.tsx`<br>`WorkDetailView.tsx` | `src/app/[locale]/work/page.tsx`<br>`src/app/[locale]/work/[...slug]/page.tsx` | `lang/[es/en]/work/page.json` |
+| **`src/modules/site`** | `HomeView.tsx` | `src/app/[locale]/page.tsx` *(único shell propio)* | `lang/[es/en]/home/page.json` |
+| **`src/modules/about`** | `src/proto-pages/about/page.tsx` | `src/app/[locale]/[...slug]` → pageId `"about"` | `lang/[es/en]/about/page.json` |
+| **`src/modules/about`** | `src/proto-pages/gallery/page.tsx` | `src/app/[locale]/[...slug]` → pageId `"gallery"` | `lang/[es/en]/gallery/page.json` |
+| **`src/modules/blog`** | `src/proto-pages/blog/page.tsx`<br>`src/proto-pages/blog/post/page.tsx` | `src/app/[locale]/[...slug]` → pageId `"blog"` | `lang/[es/en]/blog/page.json` |
+| **`src/modules/work`** | `src/proto-pages/work/page.tsx`<br>`src/proto-pages/work/post/page.tsx` | `src/app/[locale]/[...slug]` → pageId `"work"` | `lang/[es/en]/work/page.json` |
 
 ---
 
@@ -32,38 +32,62 @@ Cada módulo se compone de tres pilares ubicados en diferentes directorios del m
 
 ```text
 src/
-├── app/[locale]/[nombre-ruta]/
-│   └── page.tsx                         # 1. EL SHELL (Next.js Page)
+├── app/[locale]/[...slug]/
+│   └── page.tsx                         # 1. EL SHELL UNIVERSAL (Next.js Catch-All)
+│                                        #    Resuelve PageRouter → carga proto-page correspondiente
+│
+├── proto-pages/[nombre-seccion]/
+│   └── page.tsx                         # 2. LA PROTO-PAGE (Server Component puro)
+│                                        #    Vista desacoplada del router de Next.js
 │
 ├── components/layout-components/
-│   └── [Nombre]View.tsx                 # 2. LA VISTA (React Component en Carpeta de Vistas)
+│   └── [Nombre]View.tsx                 # 3. LA VISTA (React Component reutilizable)
+│                                        #    Maquetación visual pura con Once UI
 │
-├── modules/[nombre-modulo]/             # 3. EL NEGOCIO (MVVM-C)
+├── modules/[nombre-modulo]/             # 4. EL NEGOCIO (MVVM-C)
 │   ├── domain/
 │   │   └── types.ts                     # Interfaces y contratos del dominio
 │   ├── infrastructure/
-│   │   └── [nombre]Repository.ts        # Persistencia (MDX / API)
+│   │   └── [nombre]Repository.ts        # Persistencia (MDX en proto-pages/...)
 │   └── presentation/
 │       ├── [nombre]Coordinator.ts       # Orquestador de flujos y navegación
 │       └── viewModels/
 │           └── [nombre]ViewModel.ts     # Transformador puro de datos
+│
+├── shared/routing/
+│   └── PageRouter.ts                    # 5. MAPA DE RUTAS (Singleton de URLs localizadas)
+│                                        #    esMap / enMap / idMap / resolveRoute() / getLocalizedSlug()
+│
+└── shared/slug/
+    └── SlugRegistry.ts                  # 6. REGISTRO MDX (Slugs localizados desde frontmatter)
+                                         #    slugs: { es: "...", en: "..." } → pageId canónico
 ```
 
 ---
 
 ## 4. Responsabilidades Rígidas por Capa
 
-### A. La Ruta / Shell (`src/app/[locale]/...`)
-- **Función**: Actúa como puente con Next.js y el servidor.
+### A. El Shell Universal / Catch-All (`src/app/[locale]/[...slug]/page.tsx`)
+- **Función**: Actúa como único punto de delegación entre Next.js y el sistema de vistas.
 - **Acciones Permitidas**:
-  - Resolver parámetros asíncronos de Next.js (`params`).
-  - Generar metadatos SEO dinámicos (`generateMetadata`).
-  - Renderizar scripts estructurales de SEO semántico (`<Schema />`).
-  - Invocar al Coordinator del módulo pasándole el locale actual.
-  - Llamar al componente visual de Vista pasándole el estado serializado del ViewModel.
-- **Prohibido**: Renderizar JSX complejo de maquetación, realizar llamadas directas a i18n o interactuar con el filesystem (`fs`).
+  - Resolver parámetros asíncronos de Next.js (`params`: `locale` + `slug[]`).
+  - Invocar a `PageRouter.resolveRoute()` para determinar el `pageId` y si hay `contentSlug`.
+  - Generar metadatos SEO dinámicos (`generateMetadata`) importando lazily la proto-page.
+  - Renderizar el schema semántico JSON-LD (`<Schema />`).
+  - Importar dinámicamente la proto-page correcta del `PAGE_REGISTRY`.
+  - Declarar `generateStaticParams()` emitiendo todas las combinaciones de idioma + slug.
+- **Prohibido**: JSX complejo de maquetación, llamadas directas a i18n o al filesystem (`fs`).
 
-### B. La Vista de Presentación (`src/components/layout-components/...`)
+### B. La Proto-Page (`src/proto-pages/[seccion]/page.tsx`)
+- **Función**: Componente React Server puro que actúa como punto de composición de la sección, desacoplado de la estructura física del router de Next.js.
+- **Acciones Permitidas**:
+  - Recibir `locale` y opcionalmente `contentSlug` como props.
+  - Invocar al Coordinator del módulo pasándole el locale y/o slug.
+  - Renderizar el componente View correspondiente pasándole el estado del ViewModel.
+  - Exportar `generateMetadata` para que el catch-all lo invoque lazily.
+- **Prohibido**: Interactuar con el filesystem o importar librerías de infraestructura (`fs`, `gray-matter`).
+
+### C. La Vista de Presentación (`src/components/layout-components/...`)
 - **Función**: Renderizar la interfaz interactiva usando Once UI y maquetación visual adaptativa.
 - **Acciones Permitidas**:
   - Recibir todos los datos tipados como `props`.
@@ -71,11 +95,15 @@ src/
   - Invocar a otros componentes visuales comunes del sistema (como `<Posts />`, `<Projects />` o `<RenderHTML />`).
 - **Prohibido**: Importar librerías de Next.js de servidor, usar gray-matter, interactuar con el filesystem o leer variables de entorno dinámicas.
 
-### C. La Lógica de Negocio (`src/modules/...`)
-- **Domain**: Define los tipos de datos puros libres de frameworks.
-- **Infrastructure**: Implementa los repositorios físicos (lectura de MDX, mapeos y parsing) aislados de la UI.
-- **Presentation (ViewModels)**: Funciones TypeScript puras (`.ts`). Toman datos brutos del repositorio y traducciones de i18n, y entregan un estado plano/serializado óptimo para renderizar. No importan nada de React ni JSX.
+### D. La Lógica de Negocio (`src/modules/...`)
+- **Domain**: Define los tipos de datos puros libres de frameworks. Las entidades `BlogPost` y `Project` incluyen el campo `slugs?: Record<string, string>` para el soporte de slugs localizados.
+- **Infrastructure**: Implementa los repositorios físicos (lectura de MDX desde `src/proto-pages/*/posts|projects/`) aislados de la UI.
+- **Presentation (ViewModels)**: Funciones TypeScript puras (`.ts`). Toman datos brutos del repositorio, resuelven el slug localizado vía `SlugRegistry` y traducciones de i18n, y entregan un estado plano/serializado óptimo para renderizar.
 - **Presentation (Coordinators)**: Resuelven los flujos dinámicos (como decidir si mostrar una vista de detalle, redireccionar, o gatillar un `notFound()` de Next.js).
+
+### E. El Sistema de Enrutamiento Localizado (`src/shared/routing/` y `src/shared/slug/`)
+- **PageRouter**: Singleton que centraliza el mapeo `pageId` ↔ slug localizado para las secciones estáticas del sitio (ej. `"about"` → `"sobre-mi"` / `"about-me"`).
+- **SlugRegistry**: Registro dinámico que construye el mapeo de slugs para el contenido MDX (posts y proyectos) a partir del campo `slugs: { es, en }` del frontmatter.
 
 ---
 
