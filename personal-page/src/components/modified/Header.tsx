@@ -10,6 +10,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import styles from "../original/Header.module.scss";
 import { getNavigationCoordinator } from "@/shared/coordinator/navigationCoordinator";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
+import { resolveRoute, getLocalizedSlug } from "@/shared/routing/PageRouter";
 
 type TimeDisplayProps = {
   timeZone: string;
@@ -64,7 +65,24 @@ export const Header = () => {
 
   const handleLanguageSwitch = () => {
     const newLocale = locale === "es" ? "en" : "es";
-    router.push(`/${newLocale}${currentPath}`);
+    
+    if (currentPath === "/") {
+      router.push(`/${newLocale}`);
+      return;
+    }
+
+    const segments = currentPath.split("/").filter(Boolean);
+    const sectionSlug = segments[0];
+    const resolution = resolveRoute(sectionSlug, locale);
+
+    if (resolution) {
+      const newSectionSlug = getLocalizedSlug(resolution.pageId, newLocale);
+      const rest = segments.slice(1);
+      const newPath = `/${newLocale}/${newSectionSlug}${rest.length > 0 ? '/' + rest.join('/') : ''}`;
+      router.push(newPath);
+    } else {
+      router.push(`/${newLocale}`);
+    }
   };
 
   return (
