@@ -1,10 +1,5 @@
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-
-export interface GalleryPhoto {
-  src: string;
-  alt: string;
-  orientation: "vertical" | "horizontal";
-}
+import { GalleryPhoto } from "@/types/content.types";
 
 export interface GalleryViewState {
   title: string;

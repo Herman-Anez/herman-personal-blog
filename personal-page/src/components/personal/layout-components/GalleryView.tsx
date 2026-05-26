@@ -1,7 +1,7 @@
 "use client";
 
 import { Media, MasonryGrid } from "@once-ui-system/core";
-import { GalleryPhoto } from "@/modules/about/presentation/viewModels/galleryViewModel";
+import { GalleryPhoto } from "@/types/content.types";
 
 interface GalleryViewProps {
   images: GalleryPhoto[];
