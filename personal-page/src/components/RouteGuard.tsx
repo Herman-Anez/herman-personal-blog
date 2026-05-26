@@ -7,6 +7,7 @@ import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-
 import NotFound from "@/app/(root)/not-found";
 
 import { getNavigationCoordinator } from "@/shared/coordinator/navigationCoordinator";
+import { resolveRoute } from "@/shared/routing/PageRouter";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -37,19 +38,17 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       const pathWithoutLocale = isLocale ? "/" + segments.slice(1).join("/") : pathname;
 
       const checkRouteEnabled = () => {
-        if (pathWithoutLocale in routes) {
-          return routes[pathWithoutLocale as keyof typeof routes];
+        if (pathWithoutLocale === "/" || pathWithoutLocale === "") {
+          return routes["/" as keyof typeof routes];
         }
 
-        const nav = getNavigationCoordinator(isLocale ? locale : "es");
-        const dynamicRoutes = nav.dynamicBases;
-        for (const route of dynamicRoutes) {
-          if (pathWithoutLocale?.startsWith(route) && routes[route as keyof typeof routes]) {
-            return true;
-          }
-        }
+        const slugSegments = pathWithoutLocale.split("/").filter(Boolean);
+        const [sectionSlug] = slugSegments;
+        
+        const resolution = resolveRoute(sectionSlug, isLocale ? locale : "es");
+        if (!resolution) return false;
 
-        return false;
+        return routes[("/" + resolution.pageId) as keyof typeof routes];
       };
 
       const routeEnabled = checkRouteEnabled();

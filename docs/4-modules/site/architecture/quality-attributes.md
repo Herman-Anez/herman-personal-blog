@@ -1,33 +1,21 @@
-# {{MODULE_NAME}} — Quality Attributes
-
-## Integrity
-
-- Business invariants are enforced within the `{{AGGREGATE_ROOT}}` aggregate root.
-- No external module can directly mutate the state of this bounded context's aggregates.
-
-## Auditability
-
-- All creates, updates, and relevant state transitions must be logged.
-- Critical operations must include `correlationId` for distributed traceability.
-
-## Resilience
-
-- **Event publishing:** Uses {{PUBLISHING_PATTERN}} (e.g., Outbox pattern) to guarantee at-least-once event delivery.
-- **Retry policy:** Async consumers must implement exponential backoff on transient failures.
-- **Idempotency:** All event consumers must be idempotent — duplicate delivery has no side effects.
+# Site — Quality Attributes
 
 ## Security
 
-- **Access control:** RBAC enforced on all endpoints. Permissions required: `{{MODULE_SLUG}}:{{resource}}:read`, `{{MODULE_SLUG}}:{{resource}}:write`.
-- **PII protection:** Sensitive fields ({{PII_FIELDS}}) must not be included in integration events unless strictly necessary.
-- **M2M authentication:** Synchronous calls from other modules require ephemeral JWT (Client Credentials flow).
+- **Client-Side Authorization:** La protección de rutas mediante `RouteGuard` no depende de un servidor en tiempo real. La validación ocurre en el navegador del usuario contra un hash/variable de entorno inyectada durante el build.
+- **No Backend Surface:** Al ser una exportación 100% estática, no hay APIs ni bases de datos expuestas a inyecciones SQL o ataques de denegación de servicio (DDoS) a nivel aplicativo.
 
-## Performance
+## Maintainability & Consistency
 
-- Operational read queries ({{COMMON_QUERIES}}) must respond within acceptable times for normal administrative use.
-- Complex read projections bypass the domain model (CQRS read side) for performance.
+- **Single Source of Truth:** `once-ui.config.ts` actúa como la única fuente de verdad para el comportamiento global (enlaces, SEO base, rutas habilitadas, temas).
+- **Extensible i18n:** Añadir un nuevo idioma solo requiere replicar la carpeta de diccionarios JSON correspondientes y ajustar el tipado.
+
+## Resilience (Client Experience)
+
+- **Hydration Match:** El sistema de tema oscuro/claro evita el efecto *flash* mediante un script inyectado tempranamente que pre-calcula el estado antes del montaje de React.
+- **Fallback Routing:** Cualquier fallo de resolución de URLs a través de `PageRouter` deriva grácilmente en una vista 404 localizada, evitando caídas del runtime (500).
 
 ## Related documents
 
 - [Infrastructure](./infrastructure.md)
-- [Global quality attributes](../../2-architecture/quality-attributes.md)
+- [Architecture and Patterns](../../../2-architecture/arquitectura-y-patrones.md)

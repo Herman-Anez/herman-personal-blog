@@ -17,11 +17,11 @@ export interface ProjectDetailViewState {
 }
 
 export const getProjectDetailViewModel = async (
-  slug: string,
+  localizedSlug: string,
   locale: string
 ): Promise<ProjectDetailViewState | null> => {
   // 1. Obtener la entidad de dominio
-  const project = projectRepository.getProjectBySlug(slug);
+  const project = projectRepository.getProjectByLocalizedSlug(localizedSlug, locale);
   if (!project) return null;
 
   // 2. Cargar diccionario de i18n
@@ -59,13 +59,13 @@ export const getProjectDetailViewModel = async (
     });
 
     siblings = familyProjects.map((p) => ({
-      slug: p.slug,
+      slug: projectRepository.getSlugRegistry().getLocalizedSlug(p.slug, locale),
       title: resolveKey(dict, p.metadata.title),
     }));
   }
 
   return {
-    slug: project.slug,
+    slug: projectRepository.getSlugRegistry().getLocalizedSlug(project.slug, locale),
     family: project.family,
     isIndex: project.isIndex,
     siblings,

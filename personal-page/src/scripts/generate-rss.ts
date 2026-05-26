@@ -1,5 +1,6 @@
 import { getBlogListViewModel } from "@/modules/blog/presentation/viewModels/blogListViewModel";
 import { getDictionary } from "@/shared/i18n/dictionaries";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 import fs from "fs";
 import path from "path";
 
@@ -21,12 +22,13 @@ async function generateRSSForLocale(locale: string) {
   };
 
   const sortedPosts = await getBlogListViewModel({ locale });
+  const blogSectionSlug = getLocalizedSlug("blog", locale);
 
   const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${blog.title}</title>
-    <link>${baseURL}/${locale}/blog</link>
+    <link>${baseURL}/${locale}/${blogSectionSlug}</link>
     <description>${blog.description}</description>
     <language>${locale}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
@@ -36,15 +38,15 @@ async function generateRSSForLocale(locale: string) {
     <image>
       <url>${baseURL}${person.avatar}</url>
       <title>${blog.title}</title>
-      <link>${baseURL}/${locale}/blog</link>
+      <link>${baseURL}/${locale}/${blogSectionSlug}</link>
     </image>
     ${sortedPosts
       .map(
         (post) => `
     <item>
       <title>${post.title}</title>
-      <link>${baseURL}/${locale}/blog/${post.slug}</link>
-      <guid>${baseURL}/${locale}/blog/${post.slug}</guid>
+      <link>${baseURL}/${locale}/${blogSectionSlug}/${post.slug}</link>
+      <guid>${baseURL}/${locale}/${blogSectionSlug}/${post.slug}</guid>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
       <description><![CDATA[${post.summary}]]></description>
       ${post.image ? `<enclosure url="${baseURL}${post.image}" type="image/jpeg" />` : ""}

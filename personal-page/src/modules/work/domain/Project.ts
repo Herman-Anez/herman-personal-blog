@@ -13,6 +13,7 @@ export interface ProjectMetadata {
   team?: TeamMember[];
   link?: string;
   tag?: string;
+  slugs?: Record<string, string>;
 }
 
 export interface Project {

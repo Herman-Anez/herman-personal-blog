@@ -1,12 +1,14 @@
 import { getPosts } from "@/utils/utils";
 import { BlogPost } from "../domain/Post";
+import { SlugRegistry } from "@/shared/slug/SlugRegistry";
 
 export class MdxBlogRepository {
+  private slugRegistry: SlugRegistry | null = null;
   /**
    * Obtiene la colección completa de posts del blog desde la infraestructura física de MDX.
    */
   public getAllPosts(): BlogPost[] {
-    const rawPosts = getPosts(["src", "app", "[locale]", "blog", "posts"]);
+    const rawPosts = getPosts(["src", "proto-pages", "blog", "posts"]);
     return rawPosts as BlogPost[];
   }
 
@@ -16,6 +18,23 @@ export class MdxBlogRepository {
   public getPostBySlug(slug: string): BlogPost | null {
     const posts = this.getAllPosts();
     return posts.find((post) => post.slug === slug) ?? null;
+  }
+
+  public getSlugRegistry(): SlugRegistry {
+    if (!this.slugRegistry) {
+      this.slugRegistry = new SlugRegistry();
+      const posts = this.getAllPosts();
+      posts.forEach(post => {
+        this.slugRegistry!.register(post.slug, post.metadata.slugs);
+      });
+    }
+    return this.slugRegistry;
+  }
+
+  public getPostByLocalizedSlug(localizedSlug: string, locale: string): BlogPost | null {
+    const pageId = this.getSlugRegistry().resolveToId(localizedSlug, locale);
+    if (!pageId) return null;
+    return this.getPostBySlug(pageId);
   }
 }
 

@@ -70,6 +70,7 @@ Una capa transversal de infraestructura gestiona la resolución de URLs bilingue
 - **`PageRouter`** (`src/shared/routing/PageRouter.ts`): Singleton que mapea `pageId` canónico ↔ slug localizado para secciones estáticas. Expone `resolveRoute(slug, locale)` y `getLocalizedSlug(pageId, locale)`. Es la fuente de verdad para construir cualquier URL del sitio.
 - **`SlugRegistry`** (`src/shared/slug/SlugRegistry.ts`): Registro dinámico que lee el campo `slugs: { es: "...", en: "..." }` del frontmatter de cada MDX y construye mapas de resolución para contenido dinámico (posts y proyectos).
 - **Catch-All Universal** (`src/app/[locale]/[...slug]/page.tsx`): Única ruta de Next.js para todo el contenido de secciones. Delega la resolución al `PageRouter` y carga dinámicamente las **proto-pages** correspondientes mediante importaciones lazy.
+- **`sitemap.ts`** (`src/app/sitemap.ts`): Hub de convergencia de build-time. Es el único punto del sistema que importa simultáneamente `PageRouter`, `MdxBlogRepository` y `ProjectRepository` para emitir las URLs bilingues completas del sitio. No expone ninguna API pública — es un artefacto de build declarado con `export const dynamic = "force-static"`.
 
 ---
 

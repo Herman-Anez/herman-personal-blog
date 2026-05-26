@@ -66,7 +66,7 @@ export const getBlogListViewModel = async ({
     }
 
     return {
-      slug: post.slug,
+      slug: mdxBlogRepository.getSlugRegistry().getLocalizedSlug(post.slug, locale),
       title: resolveKey(dict, post.metadata.title),
       summary: resolveKey(dict, post.metadata.summary),
       publishedAt: post.metadata.publishedAt,
