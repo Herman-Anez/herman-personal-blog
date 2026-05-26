@@ -3,7 +3,7 @@ import { Schema, Meta } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getBlogPostCoordinator } from "@/modules/blog/presentation/blogCoordinator";
-import { BlogPostView } from "@/components/layout-components/BlogPostView";
+import { BlogPostView } from "@/components/personal/layout-components/BlogPostView";
 import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
 export async function generateMetadata({ locale, contentSlug }: { locale: string, contentSlug: string }) {

@@ -1,7 +1,7 @@
 import { Meta, Schema } from "@once-ui-system/core";
 import { baseURL, routes } from "@/resources";
 import { getHomeCoordinator } from "@/modules/site/presentation/siteCoordinator";
-import { HomeView } from "@/components/layout-components/HomeView";
+import { HomeView } from "@/components/personal/layout-components/HomeView";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;

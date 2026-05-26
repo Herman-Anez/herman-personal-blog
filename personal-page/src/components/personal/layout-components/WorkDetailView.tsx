@@ -9,7 +9,7 @@ import {
   Line,
 } from "@once-ui-system/core";
 import { ScrollToHash, CustomMDX, SeriesNav } from "@/components";
-import { Projects } from "@/components/work/Projects";
+import { Projects } from "@/components/modified/work/Projects";
 
 interface WorkDetailViewProps {
   post: any;

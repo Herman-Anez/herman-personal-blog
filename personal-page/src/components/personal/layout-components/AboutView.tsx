@@ -10,10 +10,10 @@ import {
   Row,
   Heading,
 } from "@once-ui-system/core";
-import TableOfContents from "@/components/about/TableOfContents";
-import styles from "@/components/about/about.module.scss";
+import TableOfContents from "@/components/original/about/TableOfContents";
+import styles from "@/components/original/about/about.module.scss";
 import React from "react";
-import { RenderHTML } from "@/components/RenderHTML";
+import { RenderHTML } from "@/components/personal/RenderHTML";
 
 interface AboutViewProps {
   about: any;

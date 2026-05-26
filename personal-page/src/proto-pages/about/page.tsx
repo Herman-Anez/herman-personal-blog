@@ -2,7 +2,7 @@ import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getAboutCoordinator } from "@/modules/about/presentation/aboutCoordinator";
-import { AboutView } from "@/components/layout-components/AboutView";
+import { AboutView } from "@/components/personal/layout-components/AboutView";
 import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
 export async function generateMetadata({ locale }: { locale: string }) {

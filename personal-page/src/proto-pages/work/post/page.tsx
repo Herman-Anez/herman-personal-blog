@@ -3,7 +3,7 @@ import { Schema, Meta } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { getWorkDetailCoordinator } from "@/modules/work/presentation/workCoordinator";
-import { WorkDetailView } from "@/components/layout-components/WorkDetailView";
+import { WorkDetailView } from "@/components/personal/layout-components/WorkDetailView";
 import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
 export async function generateMetadata({ locale, contentSlug }: { locale: string, contentSlug: string }) {

@@ -1,7 +1,7 @@
 import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { BlogListView } from "@/components/layout-components/BlogListView";
+import { BlogListView } from "@/components/personal/layout-components/BlogListView";
 import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
 export async function generateMetadata({ locale }: { locale: string }) {
