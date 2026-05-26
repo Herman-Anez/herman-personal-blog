@@ -2,10 +2,10 @@ import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { WorkListView } from "@/components/layout-components/WorkListView";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { dict } = getSharedContext(resolvedParams.locale);
+export async function generateMetadata({ locale }: { locale: string }) {
+  const { dict } = getSharedContext(locale);
   const title = dict.work.title;
   const description = dict.work.description;
 
@@ -14,13 +14,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description,
     baseURL: baseURL,
     image: `/images/og/home.jpg`,
-    path: `/${resolvedParams.locale}/work`,
+    path: `/${locale}/${getLocalizedSlug("work", locale)}`,
   });
 }
 
-export default async function Work({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { dict } = getSharedContext(resolvedParams.locale);
+export default async function WorkListProtoPage({ locale }: { locale: string }) {
+  const { dict } = getSharedContext(locale);
   const title = dict.work.title;
   const description = dict.work.description;
   const personName = dict.person.name;
@@ -30,19 +29,19 @@ export default async function Work({ params }: { params: Promise<{ locale: strin
       <Schema
         as="webPage"
         baseURL={baseURL}
-        path={`/work`}
+        path={`/${getLocalizedSlug("work", locale)}`}
         title={title}
         description={description}
         image={`/images/og/home.jpg`}
         author={{
           name: personName,
-          url: `${baseURL}/about`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("about", locale)}`,
           image: `${baseURL}/images/avatar.jpg`,
         }}
       />
       <WorkListView
         title={title}
-        locale={resolvedParams.locale}
+        locale={locale}
       />
     </Column>
   );

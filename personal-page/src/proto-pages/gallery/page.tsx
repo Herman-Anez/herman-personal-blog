@@ -3,10 +3,10 @@ import GalleryView from "@/components/layout-components/GalleryView";
 import { baseURL } from "@/resources";
 import { getGalleryCoordinator } from "@/modules/about/presentation/aboutCoordinator";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const flow = await getGalleryCoordinator(resolvedParams.locale);
+export async function generateMetadata({ locale }: { locale: string }) {
+  const flow = await getGalleryCoordinator(locale);
   const gallery = flow.state;
 
   return Meta.generate({
@@ -14,15 +14,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: gallery.description,
     baseURL: baseURL,
     image: `/images/og/home.jpg`,
-    path: `/${resolvedParams.locale}/gallery`,
+    path: `/${locale}/${getLocalizedSlug("gallery", locale)}`,
   });
 }
 
-export default async function Gallery({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const flow = await getGalleryCoordinator(resolvedParams.locale);
+export default async function GalleryProtoPage({ locale }: { locale: string }) {
+  const flow = await getGalleryCoordinator(locale);
   const gallery = flow.state;
-  const { person } = getSharedContext(resolvedParams.locale);
+  const { person } = getSharedContext(locale);
   
   return (
     <Flex maxWidth="l">
@@ -31,11 +30,11 @@ export default async function Gallery({ params }: { params: Promise<{ locale: st
         baseURL={baseURL}
         title={gallery.title}
         description={gallery.description}
-        path={`/gallery`}
+        path={`/${getLocalizedSlug("gallery", locale)}`}
         image={`/images/og/home.jpg`}
         author={{
           name: person.name,
-          url: `${baseURL}/gallery`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("gallery", locale)}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
@@ -43,5 +42,3 @@ export default async function Gallery({ params }: { params: Promise<{ locale: st
     </Flex>
   );
 }
-
-
