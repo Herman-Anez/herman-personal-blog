@@ -1,5 +1,5 @@
 import { Flex, Meta, Schema } from "@once-ui-system/core";
-import GalleryView from "@/components/layout-components/GalleryView";
+import GalleryView from "@/components/personal/layout-components/GalleryView";
 import { baseURL } from "@/resources";
 import { getGalleryCoordinator } from "@/modules/about/presentation/aboutCoordinator";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";

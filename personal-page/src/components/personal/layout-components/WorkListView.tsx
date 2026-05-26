@@ -1,5 +1,5 @@
 import { Column, Heading } from "@once-ui-system/core";
-import { Projects } from "@/components/work/Projects";
+import { Projects } from "@/components/modified/work/Projects";
 
 interface WorkListViewProps {
   title: string;

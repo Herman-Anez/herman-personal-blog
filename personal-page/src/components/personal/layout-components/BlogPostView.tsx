@@ -10,8 +10,8 @@ import {
   Media,
   Line,
 } from "@once-ui-system/core";
-import { Posts } from "@/components/blog/Posts";
-import { ShareSection } from "@/components/blog/ShareSection";
+import { Posts } from "@/components/modified/blog/Posts";
+import { ShareSection } from "@/components/original/blog/ShareSection";
 import { baseURL } from "@/resources";
 
 interface BlogPostViewProps {

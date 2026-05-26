@@ -3,7 +3,7 @@
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 import { useParams } from "next/navigation";
-import styles from "./Footer.module.scss";
+import styles from "../original/Footer.module.scss";
 
 export const Footer = () => {
   const params = useParams();

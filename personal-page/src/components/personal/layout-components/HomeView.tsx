@@ -9,9 +9,9 @@ import {
   Row,
   Line,
 } from "@once-ui-system/core";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
-import { RenderHTML } from "@/components/RenderHTML";
+import { Projects } from "@/components/modified/work/Projects";
+import { Posts } from "@/components/modified/blog/Posts";
+import { RenderHTML } from "@/components/personal/RenderHTML";
 
 interface HomeViewProps {
   home: any;

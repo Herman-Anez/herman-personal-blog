@@ -1,5 +1,5 @@
 import { Column, Heading } from "@once-ui-system/core";
-import { Posts } from "@/components/blog/Posts";
+import { Posts } from "@/components/modified/blog/Posts";
 
 interface BlogListViewProps {
   title: string;

@@ -3,7 +3,6 @@
 
 import { Card, Column, Media, Row, Avatar, Text } from "@once-ui-system/core";
 import { formatDate } from "@/utils/formatDate";
-import { getDictionary, resolveKey } from "@/shared/i18n/dictionaries";
 import { useParams } from "next/navigation";
 
 interface PostProps {
@@ -15,9 +14,8 @@ interface PostProps {
 export default function Post({ post, thumbnail, direction }: PostProps) {
   const params = useParams();
   const locale = (params?.locale as string) || "es";
-  const dict = getDictionary(locale);
-  const personName = dict.person.name;
-  const personAvatar = "/images/avatar.jpg";
+  const personName = post.authorName;
+  const personAvatar = post.authorAvatar || "/images/avatar.jpg";
 
   return (
     <Card

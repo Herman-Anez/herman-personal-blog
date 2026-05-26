@@ -7,7 +7,7 @@ import { Fade, Flex, Line, Row, ToggleButton, Button } from "@once-ui-system/cor
 
 import { routes, display } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
-import styles from "./Header.module.scss";
+import styles from "../original/Header.module.scss";
 import { getNavigationCoordinator } from "@/shared/coordinator/navigationCoordinator";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
 

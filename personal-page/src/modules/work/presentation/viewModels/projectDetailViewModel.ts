@@ -21,7 +21,7 @@ export const getProjectDetailViewModel = async (
   localizedSlug: string,
   locale: string
 ): Promise<ProjectDetailViewState | null> => {
-  // 1. Obtener la entidad de dominio
+  // 1. Obtener la entidaProjectDetailViewStated de dominio
   const project = projectRepository.getProjectByLocalizedSlug(localizedSlug, locale);
   if (!project) return null;
 
