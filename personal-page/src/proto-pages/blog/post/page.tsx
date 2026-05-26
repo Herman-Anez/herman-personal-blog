@@ -2,41 +2,12 @@ import { notFound } from "next/navigation";
 import { Schema, Meta } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { mdxBlogRepository } from "@/modules/blog/infrastructure/mdxRepository";
 import { getBlogPostCoordinator } from "@/modules/blog/presentation/blogCoordinator";
-import { Metadata } from "next";
 import { BlogPostView } from "@/components/layout-components/BlogPostView";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-
-export async function generateStaticParams() {
-  const locales = ["es", "en"];
-  const posts = mdxBlogRepository.getAllPosts();
-  
-  const paths: { locale: string; slug: string[] }[] = [];
-  locales.forEach((locale) => {
-    posts.forEach((post) => {
-      paths.push({
-        locale,
-        slug: post.slug.split("/"),
-      });
-    });
-  });
-  
-  return paths;
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string | string[]; locale: string }>;
-}): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-  const locale = routeParams.locale;
-
-  const flow = await getBlogPostCoordinator(slugPath, locale);
+export async function generateMetadata({ locale, contentSlug }: { locale: string, contentSlug: string }) {
+  const flow = await getBlogPostCoordinator(contentSlug, locale);
   if (flow.type !== "post") return {};
   const postState = flow.state;
 
@@ -45,18 +16,12 @@ export async function generateMetadata({
     description: postState.summary,
     baseURL: baseURL,
     image: postState.image || `/images/og/home.jpg`,
-    path: `/${locale}/blog/${postState.slug}`,
+    path: `/${locale}/${getLocalizedSlug("blog", locale)}/${postState.slug}`, // postState.slug will be updated to be the localized slug later
   });
 }
 
-export default async function Blog({ params }: { params: Promise<{ slug: string | string[]; locale: string }> }) {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-  const locale = routeParams.locale;
-
-  const flow = await getBlogPostCoordinator(slugPath, locale);
+export default async function BlogPostProtoPage({ locale, contentSlug }: { locale: string, contentSlug: string }) {
+  const flow = await getBlogPostCoordinator(contentSlug, locale);
   if (flow.type !== "post") {
     notFound();
   }
@@ -69,7 +34,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       <Schema
         as="blogPosting"
         baseURL={baseURL}
-        path={`/blog/${post.slug}`}
+        path={`/${getLocalizedSlug("blog", locale)}/${post.slug}`}
         title={post.title}
         description={post.summary}
         datePublished={post.publishedAt}
@@ -79,7 +44,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         }
         author={{
           name: post.authorName || dict.person.name,
-          url: `${baseURL}/about`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("about", locale)}`,
           image: `${baseURL}${post.authorAvatar || "/images/avatar.jpg"}`,
         }}
       />

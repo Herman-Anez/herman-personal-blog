@@ -2,41 +2,12 @@ import { notFound } from "next/navigation";
 import { Schema, Meta } from "@once-ui-system/core";
 import { baseURL } from "@/resources";
 import { getSharedContext } from "@/shared/coordinator/sharedCoordinator";
-import { Metadata } from "next";
-import { projectRepository } from "@/modules/work/infrastructure/projectRepository";
 import { getWorkDetailCoordinator } from "@/modules/work/presentation/workCoordinator";
 import { WorkDetailView } from "@/components/layout-components/WorkDetailView";
+import { getLocalizedSlug } from "@/shared/routing/PageRouter";
 
-
-export async function generateStaticParams() {
-  const locales = ["es", "en"];
-  const posts = projectRepository.getAllProjects();
-  
-  const paths: { locale: string; slug: string[] }[] = [];
-  locales.forEach((locale) => {
-    posts.forEach((post) => {
-      paths.push({
-        locale,
-        slug: post.slug.split("/"),
-      });
-    });
-  });
-  
-  return paths;
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string | string[]; locale: string }>;
-}): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-  const locale = routeParams.locale;
-
-  const flow = await getWorkDetailCoordinator(slugPath, locale);
+export async function generateMetadata({ locale, contentSlug }: { locale: string, contentSlug: string }) {
+  const flow = await getWorkDetailCoordinator(contentSlug, locale);
   if (flow.type !== "detail") return {};
   const projectState = flow.state;
 
@@ -45,22 +16,12 @@ export async function generateMetadata({
     description: projectState.summary,
     baseURL: baseURL,
     image: projectState.images[0] || `/images/og/home.jpg`,
-    path: `/${locale}/work/${projectState.slug}`,
+    path: `/${locale}/${getLocalizedSlug("work", locale)}/${projectState.slug}`, // projectState.slug will be localized
   });
 }
 
-export default async function Project({
-  params,
-}: {
-  params: Promise<{ slug: string | string[]; locale: string }>;
-}) {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-  const locale = routeParams.locale;
-
-  const flow = await getWorkDetailCoordinator(slugPath, locale);
+export default async function WorkDetailProtoPage({ locale, contentSlug }: { locale: string, contentSlug: string }) {
+  const flow = await getWorkDetailCoordinator(contentSlug, locale);
 
   if (flow.type !== "detail") {
     notFound();
@@ -74,7 +35,7 @@ export default async function Project({
       <Schema
         as="blogPosting"
         baseURL={baseURL}
-        path={`/work/${post.slug}`}
+        path={`/${getLocalizedSlug("work", locale)}/${post.slug}`}
         title={post.title}
         description={post.summary}
         datePublished={post.publishedAt}
@@ -84,7 +45,7 @@ export default async function Project({
         }
         author={{
           name: dict.person.name,
-          url: `${baseURL}/about`,
+          url: `${baseURL}/${locale}/${getLocalizedSlug("about", locale)}`,
           image: `${baseURL}/images/avatar.jpg`,
         }}
       />
