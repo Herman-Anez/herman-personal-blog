@@ -19,6 +19,7 @@ type Metadata = {
   tag?: string;
   team: Team[];
   link?: string;
+  slugs?: Record<string, string>;
 };
 
 import { notFound } from "next/navigation";
@@ -41,6 +42,7 @@ function readMDXFile(filePath: string) {
     tag: data.tag || [],
     team: data.team || [],
     link: data.link || "",
+    slugs: data.slugs || undefined,
   };
 
   return { metadata, content };
@@ -106,7 +108,7 @@ function scanMDX(dir: string, baseDir: string): any[] {
   return results;
 }
 
-export function getPosts(customPath = ["src", "app", "[locale]", "blog", "posts"]) {
+export function getPosts(customPath = ["src", "proto-pages", "blog", "posts"]) {
   const postsDir = path.join(process.cwd(), ...customPath);
   if (!fs.existsSync(postsDir)) {
     notFound();

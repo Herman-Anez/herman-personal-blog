@@ -15,6 +15,7 @@ export interface BlogPostMetadata {
   tag?: string;
   team: TeamMember[];
   link?: string;
+  slugs?: Record<string, string>;
 }
 
 export interface BlogPost {
