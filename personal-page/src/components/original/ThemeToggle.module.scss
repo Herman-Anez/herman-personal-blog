@@ -1,10 +1,50 @@
-.button {
-  display: flex;
+.themeToggleBtn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  
-  svg {
-    width: 1em;
-    height: 1em;
+  padding: 0.35rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  border-radius: 0.375rem;
+  transition: background 0.15s ease;
+  line-height: 0;
+
+  &:hover {
+    background: var(--neutral-alpha-weak, rgba(0,0,0,0.06));
   }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Icon visibility — driven purely by [data-theme] on <html>.
+   This is set synchronously by the inline script in layout.tsx,
+   so it works from the very first frame with zero flicker. */
+
+/* Light mode: show sun, hide moon */
+:global([data-theme="light"]) .iconDark {
+  display: none;
+}
+:global([data-theme="light"]) .iconLight {
+  display: inline-flex;
+}
+
+/* Dark mode: show moon, hide sun */
+:global([data-theme="dark"]) .iconLight {
+  display: none;
+}
+:global([data-theme="dark"]) .iconDark {
+  display: inline-flex;
+}
+
+/* Fallback if data-theme is not yet set (first paint edge case) */
+.iconDark {
+  display: none;
+}
+.iconLight {
+  display: inline-flex;
 }
